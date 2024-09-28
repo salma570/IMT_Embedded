@@ -1,0 +1,307 @@
+/*
+ * main.c
+ *
+ *  Created on: Aug 9, 2024
+ *      Author: hp
+ */
+/*#include "STD_Types.h"
+#include "BIT_MATH.h"
+#include "DIO_int.h"
+#include "util/delay.h"
+#include "Timer_int.h"
+#include "EXTI_int.h"
+#include "GIE_int.h"
+
+void func(void);
+
+void main(void)
+{
+
+	GIE_Enable();
+	TIM1_initCTC();
+	TIM1_CTCInterruptEnable();
+	TIM1_CTC_A_SetRegValue(5000);
+
+	DIO_SetPortDirection(PORTA,Output);
+
+	while(1)
+	{
+		TIM1_CTCCallBack(func);
+	}
+
+}
+
+void func(void)
+{
+	u16 static counter = 0;
+	//rotate CW
+	counter ++ ;
+	if(counter==1)
+	{
+		DIO_SetPinValue(PORTA,PIN_2,LOW);
+		DIO_SetPinValue(PORTA,PIN_0,HIGH);
+		//rotate CW
+		DIO_SetPinValue(PORTA,PIN_7,HIGH);
+		DIO_SetPinValue(PORTA,PIN_6,LOW);
+		DIO_SetPinValue(PORTA,PIN_5,HIGH);
+		DIO_SetPinValue(PORTA,PIN_4,LOW);
+
+	}
+	else if(counter == 1000)
+	{
+		DIO_SetPinValue(PORTA,PIN_0,LOW);
+		DIO_SetPinValue(PORTA,PIN_1,HIGH);
+
+		//disconnect motor from power
+		/*DIO_SetPinValue(PORTA,PIN_7,LOW);
+		DIO_SetPinValue(PORTA,PIN_6,LOW);
+		DIO_SetPinValue(PORTA,PIN_5,LOW);
+		DIO_SetPinValue(PORTA,PIN_4,LOW);
+		//delay to stop
+		_delay_ms(500);*/
+		//rotate ACW
+		/*DIO_SetPinValue(PORTA,PIN_7,LOW);
+		DIO_SetPinValue(PORTA,PIN_6,HIGH);
+		DIO_SetPinValue(PORTA,PIN_5,LOW);
+		DIO_SetPinValue(PORTA,PIN_4,HIGH);
+
+	}
+	else if(counter == 1600)
+	{
+		DIO_SetPinValue(PORTA,PIN_1,LOW);
+		DIO_SetPinValue(PORTA,PIN_2,HIGH);
+
+		DIO_SetPinValue(PORTA,PIN_7,LOW);
+		DIO_SetPinValue(PORTA,PIN_6,LOW);
+		DIO_SetPinValue(PORTA,PIN_5,LOW);
+		DIO_SetPinValue(PORTA,PIN_4,LOW);
+		//stop
+
+	}
+	else if(counter == 2600)
+	{
+		counter = 0;
+		//set counter to zero
+	}
+}
+*/
+
+
+
+
+
+///////////////////////////      Timers 2     //////////////////////////////
+/*void main(void)
+{
+	u16 static currentPosition = 250;
+
+	// Initialize PWM for servo control
+	TIM1_init();
+
+	// Set PD5 (OC1A) as output
+	DIO_SetPinDirection(PORTD,PIN_5, Output);
+
+	// Set Top Value
+	TIM1_ICRSetRegValue(20000); //20ms
+
+	while (1)
+	{
+		if (currentPosition >= 2500) // Check if the position is at 180 degrees -> 2ms
+		{
+			currentPosition = 250;  // Reset to 0 degrees (1 ms pulse width)
+		}
+		TIM1_CTC_A_SetRegValue(currentPosition);  // Update the Compare Match value (pulse width)
+		currentPosition += 111; // Increment position (~10 degrees)
+		_delay_ms(1000);
+	}
+}
+*/
+
+
+////////////////////////  UART ASSI  //////////////////////////////
+
+//Transmitter -> will take value from keypad
+/*void main(void)
+{
+	u8 x=0;
+
+	// Set PD5 (OC1A) as output
+	DIO_SetPinDirection(PORTD,PIN_5, Output);
+	DIO_SetPinDirection(PORTA,PIN_0,Input);
+
+	DIO_SetPinDirection(PORTD,PIN_0,Input); //RX -> D0
+	DIO_SetPinDirection(PORTD,PIN_1,Output); //TX -> D1
+	UART_init();
+	TIM1_init();
+	TIM1_ICRSetRegValue(10000);
+
+	while(1)
+	{
+		x=UART_receive();
+		switch (x) {
+		case '1':
+			TIM1_CTC_A_SetRegValue(2000);
+			break;
+		case '2':
+			TIM1_CTC_A_SetRegValue(4000);
+			break;
+		case '3':
+			TIM1_CTC_A_SetRegValue(6000);
+			break;
+		case '4':
+			TIM1_CTC_A_SetRegValue(8000);
+			break;
+		default:
+			break;
+		}
+	}
+}*/
+
+/////////////////////////////            SPI             ////////////////////////////////
+/*//main slave -> Project1
+void main(void)
+{
+	u16 x=0;
+	//pins
+
+	//SS
+	DIO_SetPinDirection(PORTB,PIN_4,Input);
+	//MOSI
+	DIO_SetPinDirection(PORTB,PIN_5,Input);
+	//MISO
+	DIO_SetPinDirection(PORTB,PIN_6,Output);
+	//SCK
+	DIO_SetPinDirection(PORTB,PIN_7,Input);
+
+	SPI_SlaveInit();
+
+	//DC Motor
+	DIO_SetPinDirection(PORTC,PIN_0,Output);
+	DIO_SetPinValue(PORTC,PIN_0,LOW);
+
+	while(1)
+	{
+		x=SPI_Tranceive(70);
+		if(x >= 26)
+		{
+			DIO_SetPinValue(PORTC,PIN_0,HIGH);
+		}
+		else
+		{
+			DIO_SetPinValue(PORTC,PIN_0,LOW);
+		}
+	}
+}
+ *
+ * //main master -> DIO
+void main(void)
+{
+	//pins
+	//SS
+	DIO_SetPinDirection(PORTB,PIN_4,Input);
+	DIO_SetPinValue(PORTB,PIN_4,HIGH);
+	//MOSI
+	DIO_SetPinDirection(PORTB,PIN_5,Output);
+	//MISO
+	DIO_SetPinDirection(PORTB,PIN_6,Input);
+	//SCK
+	DIO_SetPinDirection(PORTB,PIN_7,Output);
+
+	SPI_MasterInit();
+	ADC_init();
+
+	u8 reading = 0;
+	u8 deg = 0;
+	while(1)
+	{
+		reading = ADC_Read(Channel_0);
+		deg = ((reading * 5000)/1024)/10;
+		SPI_Tranceive(deg);
+	}
+}
+ *
+ */
+
+///////////////////////////////    I2C    /////////////////////////////
+//MASTER
+/*
+#include "STD_Types.h"
+#include "BIT_MATH.h"
+#include "DIO_int.h"
+#include "util\delay.h"
+#include "EEPROM_int.h"
+#include "KPD_int.h"
+#include "LCD_int.h"
+#include "TWI_Interface.h"
+
+//main master -> DIO
+void main(void)
+{
+	LCD_init();
+	KPD_init();
+	TWI_voidMasterInit(1);
+	u8 value = 0;
+	u8 display = 0;
+
+	LCD_WriteString("Program Starts");
+	_delay_ms(1000);
+	LCD_WriteCommand(lcd_Clear);
+	while(1)
+	{
+		value = KPD_GetKey();
+		EEPROM_Write(5,value,Device_0);
+		_delay_ms(50);
+		display = EEPROM_Read(5,Device_0);
+		if(display >= 0 && display <16)
+		{
+			LCD_WriteChar(display+48);
+			while(1){}
+		}
+	}
+}
+ */
+
+//SLAVE
+/*#include "STD_Types.h"
+#include "BIT_MATH.h"
+#include "DIO_int.h"
+#include "util/delay.h"
+#include "UART_int.h"
+#include "Timer_int.h"
+
+//main slave -> Project1
+void main(void)
+{
+	u16 x=0;
+	//pins
+
+	//SS
+	DIO_SetPinDirection(PORTB,PIN_4,Input);
+	//MOSI
+	DIO_SetPinDirection(PORTB,PIN_5,Input);
+	//MISO
+	DIO_SetPinDirection(PORTB,PIN_6,Output);
+	//SCK
+	DIO_SetPinDirection(PORTB,PIN_7,Input);
+
+	SPI_SlaveInit();
+
+	//DC Motor
+	DIO_SetPinDirection(PORTC,PIN_0,Output);
+	DIO_SetPinValue(PORTC,PIN_0,LOW);
+
+	while(1)
+	{
+		x=SPI_Tranceive(70);
+		if(x >= 26)
+		{
+			DIO_SetPinValue(PORTC,PIN_0,HIGH);
+		}
+		else
+		{
+			DIO_SetPinValue(PORTC,PIN_0,LOW);
+		}
+	}
+}
+ */
+ */
