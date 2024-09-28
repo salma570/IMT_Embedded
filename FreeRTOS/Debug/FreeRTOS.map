@@ -132,7 +132,7 @@ LOAD d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/bin/../lib/
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x3280
+.text           0x00000000     0x35a8
  *(.vectors)
  .vectors       0x00000000       0x54 d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm32.o
                 0x00000000                __vectors
@@ -329,155 +329,167 @@ LOAD d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/bin/../lib/
                 0x00001446                led2
  .text.led3     0x00001486       0x40 ./main.o
                 0x00001486                led3
- .text.main     0x000014c6       0xd4 ./main.o
+ .text.main     0x000014c6       0xba ./main.o
                 0x000014c6                main
- .text.func     0x0000159a       0x28 ./main.o
-                0x0000159a                func
+ .text.func     0x00001580       0x6a ./main.o
+                0x00001580                func
  .text.pxPortInitialiseStack
-                0x000015c2      0x306 ./port.o
-                0x000015c2                pxPortInitialiseStack
+                0x000015ea      0x306 ./port.o
+                0x000015ea                pxPortInitialiseStack
  .text.xPortStartScheduler
-                0x000018c8       0x6a ./port.o
-                0x000018c8                xPortStartScheduler
+                0x000018f0       0x6a ./port.o
+                0x000018f0                xPortStartScheduler
  .text.vPortEndScheduler
-                0x00001932        0xe ./port.o
-                0x00001932                vPortEndScheduler
+                0x0000195a        0xe ./port.o
+                0x0000195a                vPortEndScheduler
  .text.vPortYield
-                0x00001940       0xb2 ./port.o
-                0x00001940                vPortYield
+                0x00001968       0xb2 ./port.o
+                0x00001968                vPortYield
  .text.vPortYieldFromTick
-                0x000019f2       0xb6 ./port.o
-                0x000019f2                vPortYieldFromTick
+                0x00001a1a       0xb6 ./port.o
+                0x00001a1a                vPortYieldFromTick
  .text.prvSetupTimerInterrupt
-                0x00001aa8       0xb8 ./port.o
+                0x00001ad0       0xb8 ./port.o
  .text.__vector_7
-                0x00001b60        0x6 ./port.o
-                0x00001b60                __vector_7
+                0x00001b88        0x6 ./port.o
+                0x00001b88                __vector_7
  .text.xQueueCreate
-                0x00001b66      0x152 ./queue.o
-                0x00001b66                xQueueCreate
+                0x00001b8e      0x152 ./queue.o
+                0x00001b8e                xQueueCreate
  .text.xQueueGenericSend
-                0x00001cb8      0x13c ./queue.o
-                0x00001cb8                xQueueGenericSend
+                0x00001ce0      0x13c ./queue.o
+                0x00001ce0                xQueueGenericSend
  .text.xQueueGenericSendFromISR
-                0x00001df4       0x9a ./queue.o
-                0x00001df4                xQueueGenericSendFromISR
+                0x00001e1c       0x9a ./queue.o
+                0x00001e1c                xQueueGenericSendFromISR
  .text.xQueueGenericReceive
-                0x00001e8e      0x180 ./queue.o
-                0x00001e8e                xQueueGenericReceive
+                0x00001eb6      0x180 ./queue.o
+                0x00001eb6                xQueueGenericReceive
  .text.xQueueReceiveFromISR
-                0x0000200e       0x9e ./queue.o
-                0x0000200e                xQueueReceiveFromISR
+                0x00002036       0x9e ./queue.o
+                0x00002036                xQueueReceiveFromISR
  .text.uxQueueMessagesWaiting
-                0x000020ac       0x30 ./queue.o
-                0x000020ac                uxQueueMessagesWaiting
+                0x000020d4       0x30 ./queue.o
+                0x000020d4                uxQueueMessagesWaiting
  .text.uxQueueMessagesWaitingFromISR
-                0x000020dc       0x26 ./queue.o
-                0x000020dc                uxQueueMessagesWaitingFromISR
+                0x00002104       0x26 ./queue.o
+                0x00002104                uxQueueMessagesWaitingFromISR
  .text.vQueueDelete
-                0x00002102       0x2c ./queue.o
-                0x00002102                vQueueDelete
+                0x0000212a       0x2c ./queue.o
+                0x0000212a                vQueueDelete
  .text.prvCopyDataToQueue
-                0x0000212e      0x12a ./queue.o
+                0x00002156      0x12a ./queue.o
  .text.prvCopyDataFromQueue
-                0x00002258       0x90 ./queue.o
+                0x00002280       0x90 ./queue.o
  .text.prvUnlockQueue
-                0x000022e8       0xa8 ./queue.o
+                0x00002310       0xa8 ./queue.o
  .text.prvIsQueueEmpty
-                0x00002390       0x38 ./queue.o
+                0x000023b8       0x38 ./queue.o
  .text.xQueueIsQueueEmptyFromISR
-                0x000023c8       0x2e ./queue.o
-                0x000023c8                xQueueIsQueueEmptyFromISR
+                0x000023f0       0x2e ./queue.o
+                0x000023f0                xQueueIsQueueEmptyFromISR
  .text.prvIsQueueFull
-                0x000023f6       0x3e ./queue.o
+                0x0000241e       0x3e ./queue.o
  .text.xQueueIsQueueFullFromISR
-                0x00002434       0x34 ./queue.o
-                0x00002434                xQueueIsQueueFullFromISR
+                0x0000245c       0x34 ./queue.o
+                0x0000245c                xQueueIsQueueFullFromISR
  .text.xTaskGenericCreate
-                0x00002468      0x1da ./tasks.o
-                0x00002468                xTaskGenericCreate
+                0x00002490      0x1da ./tasks.o
+                0x00002490                xTaskGenericCreate
  .text.vTaskDelete
-                0x00002642       0xc6 ./tasks.o
-                0x00002642                vTaskDelete
+                0x0000266a       0xc6 ./tasks.o
+                0x0000266a                vTaskDelete
  .text.vTaskDelayUntil
-                0x00002708       0xe8 ./tasks.o
-                0x00002708                vTaskDelayUntil
+                0x00002730       0xe8 ./tasks.o
+                0x00002730                vTaskDelayUntil
  .text.vTaskDelay
-                0x000027f0       0x6a ./tasks.o
-                0x000027f0                vTaskDelay
+                0x00002818       0x6a ./tasks.o
+                0x00002818                vTaskDelay
+ .text.vTaskSuspend
+                0x00002882       0xce ./tasks.o
+                0x00002882                vTaskSuspend
+ .text.xTaskIsTaskSuspended
+                0x00002950       0x5e ./tasks.o
+                0x00002950                xTaskIsTaskSuspended
+ .text.vTaskResume
+                0x000029ae       0xc8 ./tasks.o
+                0x000029ae                vTaskResume
+ .text.xTaskResumeFromISR
+                0x00002a76       0xca ./tasks.o
+                0x00002a76                xTaskResumeFromISR
  .text.vTaskStartScheduler
-                0x0000285a       0x6e ./tasks.o
-                0x0000285a                vTaskStartScheduler
+                0x00002b40       0x6e ./tasks.o
+                0x00002b40                vTaskStartScheduler
  .text.vTaskEndScheduler
-                0x000028c8       0x18 ./tasks.o
-                0x000028c8                vTaskEndScheduler
+                0x00002bae       0x18 ./tasks.o
+                0x00002bae                vTaskEndScheduler
  .text.vTaskSuspendAll
-                0x000028e0       0x18 ./tasks.o
-                0x000028e0                vTaskSuspendAll
+                0x00002bc6       0x18 ./tasks.o
+                0x00002bc6                vTaskSuspendAll
  .text.xTaskResumeAll
-                0x000028f8      0x114 ./tasks.o
-                0x000028f8                xTaskResumeAll
+                0x00002bde      0x114 ./tasks.o
+                0x00002bde                xTaskResumeAll
  .text.xTaskGetTickCount
-                0x00002a0c       0x2e ./tasks.o
-                0x00002a0c                xTaskGetTickCount
+                0x00002cf2       0x2e ./tasks.o
+                0x00002cf2                xTaskGetTickCount
  .text.xTaskGetTickCountFromISR
-                0x00002a3a       0x2a ./tasks.o
-                0x00002a3a                xTaskGetTickCountFromISR
+                0x00002d20       0x2a ./tasks.o
+                0x00002d20                xTaskGetTickCountFromISR
  .text.uxTaskGetNumberOfTasks
-                0x00002a64       0x12 ./tasks.o
-                0x00002a64                uxTaskGetNumberOfTasks
+                0x00002d4a       0x12 ./tasks.o
+                0x00002d4a                uxTaskGetNumberOfTasks
  .text.vTaskIncrementTick
-                0x00002a76      0x1aa ./tasks.o
-                0x00002a76                vTaskIncrementTick
+                0x00002d5c      0x1aa ./tasks.o
+                0x00002d5c                vTaskIncrementTick
  .text.vTaskSwitchContext
-                0x00002c20       0xcc ./tasks.o
-                0x00002c20                vTaskSwitchContext
+                0x00002f06       0xcc ./tasks.o
+                0x00002f06                vTaskSwitchContext
  .text.vTaskPlaceOnEventList
-                0x00002cec       0x6c ./tasks.o
-                0x00002cec                vTaskPlaceOnEventList
+                0x00002fd2       0x92 ./tasks.o
+                0x00002fd2                vTaskPlaceOnEventList
  .text.xTaskRemoveFromEventList
-                0x00002d58       0xd0 ./tasks.o
-                0x00002d58                xTaskRemoveFromEventList
+                0x00003064       0xd0 ./tasks.o
+                0x00003064                xTaskRemoveFromEventList
  .text.vTaskSetTimeOutState
-                0x00002e28       0x32 ./tasks.o
-                0x00002e28                vTaskSetTimeOutState
+                0x00003134       0x32 ./tasks.o
+                0x00003134                vTaskSetTimeOutState
  .text.xTaskCheckForTimeOut
-                0x00002e5a       0xba ./tasks.o
-                0x00002e5a                xTaskCheckForTimeOut
+                0x00003166       0xce ./tasks.o
+                0x00003166                xTaskCheckForTimeOut
  .text.vTaskMissedYield
-                0x00002f14       0x14 ./tasks.o
-                0x00002f14                vTaskMissedYield
+                0x00003234       0x14 ./tasks.o
+                0x00003234                vTaskMissedYield
  .text.prvIdleTask
-                0x00002f28       0x14 ./tasks.o
+                0x00003248       0x14 ./tasks.o
  .text.prvInitialiseTCBVariables
-                0x00002f3c       0xae ./tasks.o
+                0x0000325c       0xae ./tasks.o
  .text.prvInitialiseTaskLists
-                0x00002fea       0x7a ./tasks.o
+                0x0000330a       0x82 ./tasks.o
  .text.prvCheckTasksWaitingTermination
-                0x00003064       0x7c ./tasks.o
+                0x0000338c       0x7c ./tasks.o
  .text.prvAddCurrentTaskToDelayedList
-                0x000030e0       0x92 ./tasks.o
+                0x00003408       0x92 ./tasks.o
  .text.prvAllocateTCBAndStack
-                0x00003172       0xa0 ./tasks.o
+                0x0000349a       0xa0 ./tasks.o
  .text.prvDeleteTCB
-                0x00003212       0x2c ./tasks.o
- .text.libgcc   0x0000323e        0x0 d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
- .text.libgcc   0x0000323e        0x0 d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
- .text.libgcc   0x0000323e        0x0 d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
+                0x0000353a       0x2c ./tasks.o
+ .text.libgcc   0x00003566        0x0 d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .text.libgcc   0x00003566        0x0 d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+ .text.libgcc   0x00003566        0x0 d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
  .text.avr-libc
-                0x0000323e       0x12 d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(memcpy.o)
-                0x0000323e                memcpy
+                0x00003566       0x12 d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(memcpy.o)
+                0x00003566                memcpy
  .text.avr-libc
-                0x00003250        0xe d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(memset.o)
-                0x00003250                memset
+                0x00003578        0xe d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(memset.o)
+                0x00003578                memset
  .text.avr-libc
-                0x0000325e       0x1e d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(strncpy.o)
-                0x0000325e                strncpy
-                0x0000327c                . = ALIGN (0x2)
+                0x00003586       0x1e d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(strncpy.o)
+                0x00003586                strncpy
+                0x000035a4                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000327c        0x0 d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
-                0x0000327c                exit
-                0x0000327c                _exit
+ .fini9         0x000035a4        0x0 d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+                0x000035a4                exit
+                0x000035a4                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -496,11 +508,11 @@ LOAD d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/bin/../lib/
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000327c        0x4 d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .fini0         0x000035a4        0x4 d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x00003280                _etext = .
+                0x000035a8                _etext = .
 
-.data           0x00800060        0x8 load address 0x00003280
+.data           0x00800060        0x8 load address 0x000035a8
                 0x00800060                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800060        0x0 d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm32.o
@@ -532,7 +544,7 @@ LOAD d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/bin/../lib/
                 0x00800068                _edata = .
                 0x00800068                PROVIDE (__data_end, .)
 
-.bss            0x00800068      0x300
+.bss            0x00800068      0x310
                 0x00800068                PROVIDE (__bss_start, .)
  *(.bss)
  .bss           0x00800068        0x0 d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm32.o
@@ -589,59 +601,72 @@ LOAD d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/bin/../lib/
  .bss.xNextFreeByte
                 0x008000a8        0x2 ./heap_1.o
  .bss.xHeap     0x008000aa      0x258 ./heap_1.o
- .bss.i.1430    0x00800302        0x1 ./main.o
- .bss.i.1439    0x00800303        0x1 ./main.o
- .bss.i.1448    0x00800304        0x1 ./main.o
+ .bss.led1Handle
+                0x00800302        0x2 ./main.o
+                0x00800302                led1Handle
+ .bss.led2Handle
+                0x00800304        0x2 ./main.o
+                0x00800304                led2Handle
+ .bss.led3Handle
+                0x00800306        0x2 ./main.o
+                0x00800306                led3Handle
+ .bss.i.1433    0x00800308        0x1 ./main.o
+ .bss.i.1442    0x00800309        0x1 ./main.o
+ .bss.i.1451    0x0080030a        0x1 ./main.o
+ .bss.flag.1466
+                0x0080030b        0x1 ./main.o
  .bss.pxCurrentTCB
-                0x00800305        0x2 ./tasks.o
-                0x00800305                pxCurrentTCB
+                0x0080030c        0x2 ./tasks.o
+                0x0080030c                pxCurrentTCB
  .bss.uxTasksDeleted
-                0x00800307        0x1 ./tasks.o
- .bss.uxCurrentNumberOfTasks
-                0x00800308        0x1 ./tasks.o
- .bss.xTickCount
-                0x00800309        0x2 ./tasks.o
- .bss.uxTopUsedPriority
-                0x0080030b        0x1 ./tasks.o
- .bss.uxTopReadyPriority
-                0x0080030c        0x1 ./tasks.o
- .bss.xSchedulerRunning
-                0x0080030d        0x1 ./tasks.o
- .bss.uxSchedulerSuspended
                 0x0080030e        0x1 ./tasks.o
- .bss.uxMissedTicks
+ .bss.uxCurrentNumberOfTasks
                 0x0080030f        0x1 ./tasks.o
- .bss.xMissedYield
-                0x00800310        0x1 ./tasks.o
- .bss.xNumOfOverflows
-                0x00800311        0x1 ./tasks.o
- .bss.uxTaskNumber
+ .bss.xTickCount
+                0x00800310        0x2 ./tasks.o
+ .bss.uxTopUsedPriority
                 0x00800312        0x1 ./tasks.o
+ .bss.uxTopReadyPriority
+                0x00800313        0x1 ./tasks.o
+ .bss.xSchedulerRunning
+                0x00800314        0x1 ./tasks.o
+ .bss.uxSchedulerSuspended
+                0x00800315        0x1 ./tasks.o
+ .bss.uxMissedTicks
+                0x00800316        0x1 ./tasks.o
+ .bss.xMissedYield
+                0x00800317        0x1 ./tasks.o
+ .bss.xNumOfOverflows
+                0x00800318        0x1 ./tasks.o
+ .bss.uxTaskNumber
+                0x00800319        0x1 ./tasks.o
  .bss.pxReadyTasksLists
-                0x00800313       0x2d ./tasks.o
+                0x0080031a       0x2d ./tasks.o
  .bss.xDelayedTaskList1
-                0x00800340        0x9 ./tasks.o
+                0x00800347        0x9 ./tasks.o
  .bss.xDelayedTaskList2
-                0x00800349        0x9 ./tasks.o
+                0x00800350        0x9 ./tasks.o
  .bss.pxDelayedTaskList
-                0x00800352        0x2 ./tasks.o
+                0x00800359        0x2 ./tasks.o
  .bss.pxOverflowDelayedTaskList
-                0x00800354        0x2 ./tasks.o
+                0x0080035b        0x2 ./tasks.o
  .bss.xPendingReadyList
-                0x00800356        0x9 ./tasks.o
+                0x0080035d        0x9 ./tasks.o
  .bss.xTasksWaitingTermination
-                0x0080035f        0x9 ./tasks.o
+                0x00800366        0x9 ./tasks.o
+ .bss.xSuspendedTaskList
+                0x0080036f        0x9 ./tasks.o
  *(COMMON)
-                0x00800368                PROVIDE (__bss_end, .)
-                0x00003280                __data_load_start = LOADADDR (.data)
-                0x00003288                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00800378                PROVIDE (__bss_end, .)
+                0x000035a8                __data_load_start = LOADADDR (.data)
+                0x000035b0                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800368        0x0
-                0x00800368                PROVIDE (__noinit_start, .)
+.noinit         0x00800378        0x0
+                0x00800378                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x00800368                PROVIDE (__noinit_end, .)
-                0x00800368                _end = .
-                0x00800368                PROVIDE (__heap_start, .)
+                0x00800378                PROVIDE (__noinit_end, .)
+                0x00800378                _end = .
+                0x00800378                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -659,7 +684,7 @@ LOAD d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/bin/../lib/
 .signature
  *(.signature*)
 
-.stab           0x00000000     0x50a0
+.stab           0x00000000     0x5460
  *(.stab)
  .stab          0x00000000      0x5a0 ./DIO_prg.o
  .stab          0x000005a0      0x408 ./EXTI_prg.o
@@ -672,20 +697,20 @@ LOAD d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/bin/../lib/
                                 0x624 (size before relaxing)
  .stab          0x00001974      0x474 ./list.o
                                 0x750 (size before relaxing)
- .stab          0x00001de8      0x4a4 ./main.o
-                                0x810 (size before relaxing)
- .stab          0x0000228c      0x840 ./port.o
+ .stab          0x00001de8      0x4d4 ./main.o
+                                0x840 (size before relaxing)
+ .stab          0x000022bc      0x840 ./port.o
                                 0xb70 (size before relaxing)
- .stab          0x00002acc      0xe94 ./queue.o
+ .stab          0x00002afc      0xe94 ./queue.o
                                0x11d0 (size before relaxing)
- .stab          0x00003960     0x1578 ./tasks.o
-                               0x17d0 (size before relaxing)
- .stab          0x00004ed8      0x1c8 ./timers.o
+ .stab          0x00003990     0x1908 ./tasks.o
+                               0x1b60 (size before relaxing)
+ .stab          0x00005298      0x1c8 ./timers.o
                                 0x4c8 (size before relaxing)
 
-.stabstr        0x00000000     0x2e93
+.stabstr        0x00000000     0x2f98
  *(.stabstr)
- .stabstr       0x00000000     0x2e93 ./DIO_prg.o
+ .stabstr       0x00000000     0x2f98 ./DIO_prg.o
 
 .stab.excl
  *(.stab.excl)

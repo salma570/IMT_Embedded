@@ -1,9 +1,9 @@
-08:57:48 **** Incremental Build of configuration Debug for project FreeRTOS ****
+11:39:15 **** Incremental Build of configuration Debug for project FreeRTOS ****
 make all 
 Building file: ../main.c
 Invoking: AVR Compiler
 avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"main.d" -MT"main.o" -c -o "main.o" "../main.c"
-../main.c:68: warning: return type of 'main' is not 'int'
+../main.c:73: warning: return type of 'main' is not 'int'
 Finished building: ../main.c
  
 Building target: FreeRTOS.elf
@@ -25,15 +25,15 @@ AVR Memory Usage
 ----------------
 Device: atmega32
 
-Program:   12936 bytes (39.5% Full)
+Program:   13744 bytes (41.9% Full)
 (.text + .data + .bootloader)
 
-Data:        776 bytes (37.9% Full)
+Data:        792 bytes (38.7% Full)
 (.data + .bss + .noinit)
 
 
 Finished building: sizedummy
  
 
-08:57:51 Build Finished (took 3s.211ms)
+11:39:18 Build Finished (took 2s.857ms)
 

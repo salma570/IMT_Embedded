@@ -6,6 +6,11 @@
 #include "GIE_int.h"
 #include "EXTI_int.h"
 
+// Task handles for LED tasks
+xTaskHandle led1Handle=NULL;
+xTaskHandle led2Handle=NULL;
+xTaskHandle led3Handle=NULL;
+
 void led1(void *ptr)
 {
 	static u8 i=0;
@@ -69,39 +74,41 @@ void main(void)
 {
 	DIO_SetPortDirection(0,PortOut);
 
-	xTaskCreate(led1,NULL,configMINIMAL_STACK_SIZE,NULL,0,NULL);
-	xTaskCreate(led2,NULL,configMINIMAL_STACK_SIZE,NULL,1,NULL);
-	xTaskCreate(led3,NULL,configMINIMAL_STACK_SIZE,NULL,2,NULL);
+	DIO_SetPinDirection(3,PIN_2,Input);
+	DIO_SetPinValue(3,PIN_2,HIGH);
+
+	EXTI_SetTriggerMode();
+	EXTI0_CallBackFunc(func);
+	EXTI_Enable(EXTI0);
+	GIE_Enable();
+
+	xTaskCreate(led1,NULL,configMINIMAL_STACK_SIZE,NULL,0,&led1Handle);
+	xTaskCreate(led2,NULL,configMINIMAL_STACK_SIZE,NULL,1,&led2Handle);
+	xTaskCreate(led3,NULL,configMINIMAL_STACK_SIZE,NULL,2,&led3Handle);
 
 	vTaskStartScheduler();
 
-	GIE_Enable();
-
-	EXTI_Enable(EXTI0);
-	EXTI_SetTriggerMode();
-
-	DIO_SetPinDirection(PORTD,PIN_2,Input);
-	DIO_SetPinValue(PORTD,PIN_2,HIGH);
-	u8 button = 0;
 	while(1)
 	{
-		button = DIO_GetPinValue(PORTD,PIN_2);
-		if (button ==0)
-		{
-			EXTI0_CallBackFunc(func);
-		}
+
 	}
 }
 
 void func(void)
 {
-	u8 button = 0;
-	while(1)
+	static u8 flag = 0;
+	if (flag ==0)
 	{
-		button = DIO_GetPinValue(PORTD,PIN_2);
-		if (button ==1)
-		{
-			break;
-		}
+		vTaskSuspend(led1Handle);
+		vTaskSuspend(led2Handle);
+		vTaskSuspend(led3Handle);
+		flag=1;
+	}
+	else
+	{
+		vTaskResume(led1Handle);
+		vTaskResume(led2Handle);
+		vTaskResume(led3Handle);
+		flag=0;
 	}
 }

@@ -1,0 +1,129 @@
+#include "STD_Types.h"
+#include "BIT_MATH.h"
+#include "DIO_int.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "GIE_int.h"
+#include "EXTI_int.h"
+
+// Task handles for LED tasks
+TaskHandle_t led1Handle = NULL;
+TaskHandle_t led2Handle = NULL;
+TaskHandle_t led3Handle = NULL;
+
+// Function Prototypes
+void led1(void *ptr);
+void led2(void *ptr);
+void led3(void *ptr);
+void EXTI_ISR(void);
+
+void led1(void *ptr)
+{
+    static u8 i = 0;
+    while (1)
+    {
+        if (i == 0)
+        {
+            DIO_SetPinValue(0, PIN_0, HIGH);
+            i = 1;
+        }
+        else
+        {
+            DIO_SetPinValue(0, PIN_0, LOW);
+            i = 0;
+        }
+        vTaskDelay(1000);
+    }
+}
+
+void led2(void *ptr)
+{
+    static u8 i = 0;
+    while (1)
+    {
+        if (i == 0)
+        {
+            DIO_SetPinValue(0, PIN_1, HIGH);
+            i = 1;
+        }
+        else
+        {
+            DIO_SetPinValue(0, PIN_1, LOW);
+            i = 0;
+        }
+        vTaskDelay(3000);
+    }
+}
+
+void led3(void *ptr)
+{
+    static u8 i = 0;
+    while (1)
+    {
+        if (i == 0)
+        {
+            DIO_SetPinValue(0, PIN_2, HIGH);
+            i = 1;
+        }
+        else
+        {
+            DIO_SetPinValue(0, PIN_2, LOW);
+            i = 0;
+        }
+        vTaskDelay(5000);
+    }
+}
+
+void main(void)
+{
+    // Set port direction for LEDs
+    DIO_SetPortDirection(0, PortOut);
+
+    // Create LED tasks
+    xTaskCreate(led1, "LED1", configMINIMAL_STACK_SIZE, NULL, 1, &led1Handle);
+    xTaskCreate(led2, "LED2", configMINIMAL_STACK_SIZE, NULL, 1, &led2Handle);
+    xTaskCreate(led3, "LED3", configMINIMAL_STACK_SIZE, NULL, 1, &led3Handle);
+
+    // Start the scheduler
+    vTaskStartScheduler();
+
+    // Enable global interrupts
+    GIE_Enable();
+
+    // Configure external interrupt
+    EXTI_Enable(EXTI0);
+    EXTI_SetTriggerMode();  // Detect falling edge (button press)
+    EXTI0_CallBackFunc(EXTI_ISR);
+
+    // Set pin for the button as input with a pull-up
+    DIO_SetPinDirection(PORTD, PIN_2, Input);
+    DIO_SetPinValue(PORTD, PIN_2, HIGH);
+
+    // Main loop
+    while (1)
+    {
+        // Empty loop as tasks handle the LED blinking
+    }
+}
+
+// Interrupt service routine for the external interrupt
+void EXTI_ISR(void)
+{
+    static u8 paused = 0;  // Flag to check whether tasks are paused or running
+
+    // Toggle between pausing and resuming tasks
+    if (paused == 0)
+    {
+        vTaskSuspend(led1Handle);
+        vTaskSuspend(led2Handle);
+        vTaskSuspend(led3Handle);
+        paused = 1;
+    }
+    else
+    {
+        vTaskResume(led1Handle);
+        vTaskResume(led2Handle);
+        vTaskResume(led3Handle);
+        paused = 0;
+    }
+}
