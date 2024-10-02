@@ -1,11 +1,38 @@
-08:12:26 **** Incremental Build of configuration Debug for project DIO ****
+19:54:23 **** Incremental Build of configuration Debug for project DIO ****
 make all 
 Building file: ../OS_prg.c
 Invoking: AVR Compiler
 avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"OS_prg.d" -MT"OS_prg.o" -c -o "OS_prg.o" "../OS_prg.c"
-AllocationBase 0x0, BaseAddress 0x71540000, RegionSize 0x4D0000, State 0x10000
-D:\hpNew\Downloads\00-Tools\IMT Tools\SDK\IMT_SDK_Win_64\WinAVR\utils\bin\sh.exe: *** Couldn't reserve space for cygwin's heap, Win32 error 0
-make: *** [OS_prg.o] Error 1
+Finished building: ../OS_prg.c
+ 
+Building target: DIO.elf
+Invoking: AVR C Linker
+avr-gcc -Wl,-Map,DIO.map -mmcu=atmega32 -o "DIO.elf"  ./ADC_prg.o ./DIO_prg.o ./EEPROM_prg.o ./EXTI_prg.o ./GIE_prg.o ./KPD_prg.o ./LCD_prg.o ./OS_prg.o ./SPI_prg.o ./Seg7_prg.o ./TWI_prg.o ./Timer_prg.o ./UART_prg.o ./WDG_prg.o ./commented.o ./main.o ./timers1Assi.o   
+Finished building target: DIO.elf
+ 
+Invoking: AVR Create Extended Listing
+avr-objdump -h -S DIO.elf  >"DIO.lss"
+Finished building: DIO.lss
+ 
+Create Flash image (ihex format)
+avr-objcopy -R .eeprom -R .fuse -R .lock -R .signature -O ihex DIO.elf  "DIO.hex"
+Finished building: DIO.hex
+ 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega32 DIO.elf
+AVR Memory Usage
+----------------
+Device: atmega32
 
-08:12:28 Build Finished (took 2s.334ms)
+Program:   12016 bytes (36.7% Full)
+(.text + .data + .bootloader)
+
+Data:        109 bytes (5.3% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 
+
+19:54:30 Build Finished (took 7s.938ms)
 

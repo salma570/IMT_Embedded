@@ -14,7 +14,7 @@ static void func(void)
 	if(c == 3907)
 	{
 		OS_Scheduler();
-		TIM0_OVFSetRegValue(192);
+		 TIM0_OFSetRegValue(192);
 		c = 0;
 	}
 	else
@@ -64,9 +64,9 @@ void OS_Scheduler(void)
 
 void OS_Start(void)
 {
-	TIM0_init();
-	TIM0_OVFSetRegValue(192);
-	TIM0_OVFCallBack(func);
+	TIM0_OFinit();
+	TIM0_OFSetRegValue(192);
+	TIM0_OFCallBack(func);
 	GIE_Enable();
-	TIM0_OVFIntEnable();
+	TIM0_OFInterruptEnable();
 }

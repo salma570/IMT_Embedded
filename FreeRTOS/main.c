@@ -72,16 +72,20 @@ void func(void);
 
 void main(void)
 {
+	//PORTA for LEDs
 	DIO_SetPortDirection(0,PortOut);
 
+	//Set Button -> Pullup
 	DIO_SetPinDirection(3,PIN_2,Input);
 	DIO_SetPinValue(3,PIN_2,HIGH);
 
+	//Interrupt
 	EXTI_SetTriggerMode();
 	EXTI0_CallBackFunc(func);
 	EXTI_Enable(EXTI0);
 	GIE_Enable();
 
+	//Tasks
 	xTaskCreate(led1,NULL,configMINIMAL_STACK_SIZE,NULL,0,&led1Handle);
 	xTaskCreate(led2,NULL,configMINIMAL_STACK_SIZE,NULL,1,&led2Handle);
 	xTaskCreate(led3,NULL,configMINIMAL_STACK_SIZE,NULL,2,&led3Handle);
