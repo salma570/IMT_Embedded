@@ -4,5 +4,5 @@
 2. `main.c` file (or maybe not, did not start keeping them until later)
 3. A video of the hardware working (either in real life or simulated on `Proteus`)
 4. Proteus File for simulated tasks (if exists --and maybe not, just my forgetful head again 😁😅)
-
-#### *Drivers exist in `DIO` folder and `FreeRTOS` folder.
+#### Stay Tuned for the Final Project!
+##### *Drivers exist in `DIO` folder and `FreeRTOS` folder.
