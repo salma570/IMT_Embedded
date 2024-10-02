@@ -1,0 +1,46 @@
+/*
+ * RTC_prv.h
+ *
+ *  Created on: Oct 2, 2024
+ *      Author: hp
+ */
+
+#ifndef RTC_PRV_H_
+#define RTC_PRV_H_
+
+#define Sec_Reg  		*((volatile u8*)(0x00))
+#define Min_Reg 		*((volatile u8*)(0x01))
+#define Hrs_Reg			*((volatile u8*)(0x02))
+#define WeekDay_Reg 	*((volatile u8*)(0x03))
+#define Date_Reg		*((volatile u8*)(0x04))
+#define Month_Reg  		*((volatile u8*)(0x05))
+#define Year_Reg  		*((volatile u8*)(0x06))
+#define Ctrl_Reg  		*((volatile u8*)(0x07))
+
+
+// Bits inside registers
+#define  REGISTER_INIT_STATUS           0X08
+#define  REGISTER_SNAP0_VACANCY         0X09
+#define  RAM_START                      0X08
+#define  RAM_END                        0X3F
+#define  BIT_SETTING_CH                 0X07
+#define  BIT_SETTING_RS0                0X00
+#define  BIT_SETTING_RS1                0X01
+#define  BIT_SETTING_SQWE               0X04
+#define  BIT_SETTING_OUT                0X07
+#define  BIT_SETTING_AMPM               0X06
+#define  TIMEKEEPER_REGISTERS_START     0X00
+#define  TIMEKEEPER_REGISTERS_END       0X07
+#define  REGISTER_SECONDS_DEFAULT       0X00
+#define  REGISTER_MINUTES_DEFAULT       0X00
+#define  REGISTER_HOURS_DEFAULT         0X00
+#define  REGISTER_DAY_OF_WEEK_DEFAULT   0X01
+#define  REGISTER_DATE_DEFAULT          0X01
+#define  REGISTER_MONTH_DEFAULT         0X01
+#define  REGISTER_YEAR_DEFAULT          0X00
+#define  REGISTER_CONTROL_DEFAULT       0X00
+#define  RAM_BLOCK_DEFAULT              0x00
+#define  SNAP0_ADDRESS					0x39
+
+
+#endif /* RTC_PRV_H_ */

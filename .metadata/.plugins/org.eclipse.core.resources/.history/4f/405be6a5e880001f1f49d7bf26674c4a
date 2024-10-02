@@ -1,0 +1,21 @@
+/*
+ * RTC_prv.h
+ *
+ *  Created on: Oct 2, 2024
+ *      Author: hp
+ */
+
+#ifndef RTC_PRV_H_
+#define RTC_PRV_H_
+
+#define Sec_Reg  		*((volatile u8*)(0x00))
+#define Min_Reg 		*((volatile u8*)(0x01))
+#define Hrs_Reg			*((volatile u8*)(0x02))
+#define WeekDay_Reg 	*((volatile u8*)(0x03))
+#define Date_Reg		*((volatile u8*)(0x04))
+#define Month_Reg  		*((volatile u8*)(0x05))
+#define Year_Reg  		*((volatile u8*)(0x06))
+#define Ctrl_Reg  		*((volatile u8*)(0x07))
+
+
+#endif /* RTC_PRV_H_ */
