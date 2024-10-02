@@ -41,6 +41,8 @@
 #define  REGISTER_CONTROL_DEFAULT       0X00
 #define  RAM_BLOCK_DEFAULT              0x00
 #define  SNAP0_ADDRESS					0x39
+
+//extra configs -> in progress
 #define DS1307_I2C_ADDRESS                    0X68
 #define CLOCK_RUN                             0X01
 #define CLOCK_HALT                            0X00
