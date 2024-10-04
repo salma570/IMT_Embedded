@@ -52,5 +52,5 @@ Mkfile.old
 dkms.conf
 
 # Other Folders
-.metadata
-RemoteSystemsTempFiles
+.metadata/
+RemoteSystemsTempFiles/
