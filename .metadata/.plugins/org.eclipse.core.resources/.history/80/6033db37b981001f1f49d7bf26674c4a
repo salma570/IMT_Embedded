@@ -1,0 +1,19 @@
+/*
+ * main.c
+ *
+ *  Created on: Oct 2, 2024
+ *      Author: hp
+ */
+
+#include "STD_Types.h"
+#include "BIT_MATH.h"
+#include "DIO_int.h"
+#include "LCD_int.h"
+#include "KPD_int.h"
+#include "RTC_int.h"
+#include "stopwatch_int.h"
+
+void main(void)
+{
+
+}

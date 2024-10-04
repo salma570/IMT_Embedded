@@ -1,0 +1,56 @@
+/*
+ * RTC_int.h
+ *
+ *  Created on: Oct 2, 2024
+ *      Author: hp
+ */
+
+#ifndef RTC_INT_H_
+#define RTC_INT_H_
+
+#include "RTC_prv.h"
+
+// struct or arrays
+typedef struct {
+	u8 u8Seconds;
+	u8 u8Minutes;
+	u8 u8Hours;
+	u8 u8DayOfWeek;
+	u8 u8Days;
+	u8 u8Months;
+	u16 u8Years;
+} RTC_val;
+
+//for user interface
+#define RTC_MODE_WRITE 0x00
+#define RTC_MODE_READ  0x01
+
+//from the datasheet ?? zay clear flag w keda el khadnahom copy abl keda to save time
+#define DS1307_ReadMode
+#define DS1307_WriteMode
+
+
+//init
+void RTC_voidInit(void);
+
+//to set time
+void RTC_voidSetSec(RTC_val*);
+void RTC_voidSetMin(RTC_val*);
+void RTC_voidSetHour(RTC_val*);
+
+//to set date
+void RTC_voidSetYr(RTC_val*);
+void RTC_voidSetMonth(RTC_val*);
+void RTC_voidSetDate(RTC_val*);
+void RTC_voidSetWeekDay(RTC_val*);
+
+//getters
+void RTC_voidGetCurrentTime(RTC_val*);
+void RTC_voidGetCurrentDate(RTC_val*);
+void RTC_voidGetWeekDay(RTC_val*);
+
+//Converters > display to user the decimal value lol
+u8 DEC_to_BCD(u8);
+u8 BCD_to_DEC(u8);
+
+#endif /* RTC_INT_H_ */

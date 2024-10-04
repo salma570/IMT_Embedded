@@ -8,7 +8,7 @@
 #ifndef EXTI_CFG_H_
 #define EXTI_CFG_H_
 
-#define EXTI0_mode RisingEdge
+#define EXTI0_mode FallingEdge
 
 #define EXTI1_mode RisingEdge
 
