@@ -1,39 +1,20 @@
-19:56:26 **** Incremental Build of configuration Debug for project FinalProject ****
+20:14:50 **** Incremental Build of configuration Debug for project FinalProject ****
 make all 
-Building file: ../main.c
-Invoking: AVR Compiler
-avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"main.d" -MT"main.o" -c -o "main.o" "../main.c"
-../main.c:8: warning: return type of 'main' is not 'int'
-Finished building: ../main.c
- 
-Building target: FinalProject.elf
-Invoking: AVR C Linker
-avr-gcc -Wl,-Map,FinalProject.map -mmcu=atmega32 -o "FinalProject.elf"  ./DIO_prg.o ./EXTI_prg.o ./GIE_prg.o ./KPD_prg.o ./LCD_prg.o ./OS_prg.o ./TWI_prg.o ./Timer_prg.o ./WDG_prg.o ./main.o   
-Finished building target: FinalProject.elf
- 
-Invoking: AVR Create Extended Listing
-avr-objdump -h -S FinalProject.elf  >"FinalProject.lss"
-Finished building: FinalProject.lss
- 
-Create Flash image (ihex format)
-avr-objcopy -R .eeprom -R .fuse -R .lock -R .signature -O ihex FinalProject.elf  "FinalProject.hex"
-Finished building: FinalProject.hex
- 
 Invoking: Print Size
 avr-size --format=avr --mcu=atmega32 FinalProject.elf
 AVR Memory Usage
 ----------------
 Device: atmega32
 
-Program:   10568 bytes (32.3% Full)
+Program:   22802 bytes (69.6% Full)
 (.text + .data + .bootloader)
 
-Data:         98 bytes (4.8% Full)
+Data:        843 bytes (41.2% Full)
 (.data + .bss + .noinit)
 
 
 Finished building: sizedummy
  
 
-19:56:34 Build Finished (took 7s.627ms)
+20:14:52 Build Finished (took 1s.643ms)
 

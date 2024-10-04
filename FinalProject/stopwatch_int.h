@@ -11,7 +11,7 @@
 u8 STOPWATCH_u8CheckFlag(void);
 void STOPWATCH_voidToggle(void);
 void STOPWATCH_voidRun(void);
-void STOPWATCH_voidStop(void);  // returns the current time in memory w implement stop funct
+void STOPWATCH_voidDisplay(void);  // returns the current time in memory w implement stop funct
 void STOPWATCH_voidSReset(void);
 
 

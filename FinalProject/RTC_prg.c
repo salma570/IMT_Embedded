@@ -10,6 +10,7 @@
 #include "RTC_prv.h"
 #include "RTC_int.h"
 #include "TWI_Interface.h"
+#include "util/delay.h"
 
 //7otto el validations barra
 void RTC_voidInit(void) //can add option to user to choose mode 12 or 24
