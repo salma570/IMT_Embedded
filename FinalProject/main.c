@@ -51,7 +51,7 @@ void main(void)
 
 			break;
 		case StopWatch:
-			DIO_SetPinDirection(PORTD,PIN_2,Input);
+			DIO_SetPinDirection(PORTD,PIN_2,Input); //push button connected to exti0
 			DIO_SetPinValue(PORTD,PIN_2,HIGH); //pullup
 
 			break;
