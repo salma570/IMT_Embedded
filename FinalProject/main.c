@@ -51,7 +51,7 @@ void main(void)
 
 			break;
 		case StopWatch:
-			DIO_SetPinDirection(PORTD,PIN_2,Input); //push button to stop/start stopwatch (RTOS Assi)
+			DIO_SetPinDirection(PORTD,PIN_2,Input); //push button to stop/start (RTOS Assi)
 			DIO_SetPinValue(PORTD,PIN_2,HIGH); //pull up
 
 			break;
