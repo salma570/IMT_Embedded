@@ -65,7 +65,7 @@ void CountDownu8_validateTemp(void)
 	u8 flag_valid = 1;
 	
 	//IF CONDITONS TO VALIDATE
-	if((u8tempHr_1+ u8tempHr_2 >24) || (u8tempmin_1+u8tempmin_2>59) || (u8tempmsec_1+u8tempmsec_2>59))
+	if((u8tempHr_1*10+ u8tempHr_2 >24) || (u8tempmin_1*10+u8tempmin_2>59) || (u8tempmsec_1*10+u8tempmsec_2>59))
 		flag_valid = 0;
 	if(flag_valid ==1)
 	{
@@ -87,9 +87,9 @@ void CountDownu8_validateTemp(void)
 }
 void CountDownu8_SetCurrent_Values(void)
 {
-	u8CurrentHr = u8tempHr_1+ u8tempHr_2;
-	u8CurrentMin = u8tempmin_1+u8tempmin_2;
-	u8CurrentSec = u8tempmsec_1+u8tempmsec_2;
+	u8CurrentHr = u8tempHr_1*10+ u8tempHr_2;
+	u8CurrentMin = u8tempmin_1*10+u8tempmin_2;
+	u8CurrentSec = u8tempmsec_1*10+u8tempmsec_2;
 }
 
 u8 GetCurrentButton_count(void)
