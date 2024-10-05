@@ -98,15 +98,6 @@ void StopWatch_Task(void *ptr)
 	}
 }
 
-void Countdown_Task(void *ptr)
-{
-	while(1)
-	{
-		Countdown_VoidRun();
-		STOPWATCH_voidDisplay();
-		vTaskDelay(500);
-	}
-}
 
 void StopWatch_EXTI(void)
 {
