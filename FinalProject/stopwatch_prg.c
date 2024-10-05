@@ -42,7 +42,7 @@ static u8 increment_Current_digit =0;
 void CountDownu8_SetTemp(void)
 {
 	int x = GetCurrentButton_count(); //ok button 
-	if(x>6){
+	if(x>=6){
 	    CountDownu8_validateTemp(); 
 		count_button_pressed =0;
 	}else{
