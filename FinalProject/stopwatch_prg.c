@@ -10,21 +10,32 @@
 #include "LCD_int.h"
 #include "stopwatch_int.h"
 
-
-static u8 u8CurrentSec = 0;
-static u8 u8CurrentMin = 0;
+static u8 u8CurrentSec = 5;
+static u8 u8CurrentMin = 1;
 static u8 u8CurrentHr = 0;
-static u8 u8StopwatchFlag = 0;
 
-
-void STOPWATCH_voidToggle()
+u8 CountDown_u8Run(void)
 {
-	u8StopwatchFlag ^= (1<<0);
-	LCD_GoTo(line_1,0);
-	LCD_WriteString("Stopwatch:");
+	if (u8CurrentHr <= 0 && u8CurrentMin <=0 && u8CurrentSec <=0)
+	{
+		return 1;
+	}
+	u8CurrentSec --;
+	if (u8CurrentSec  == 0 && u8CurrentMin>0)
+	{
+		u8CurrentSec = 59;
+		u8CurrentMin --;
+	}
+	if (u8CurrentMin  == 0 && u8CurrentHr>0)
+	{
+		u8CurrentMin = 59;
+		u8CurrentHr --;
+	}
+	return 0;
 }
 
-void STOPWATCH_voidRun(void){
+void STOPWATCH_voidRun(void)
+{
 	u8CurrentSec ++;
 	if (u8CurrentSec  == 60)
 	{
@@ -40,9 +51,10 @@ void STOPWATCH_voidRun(void){
 	{
 		u8CurrentHr= 0;
 	}
+	return;
 }
 
-void STOPWATCH_voidDisplay(void)  // akenou bydisplay bs no increment
+void STOPWATCH_voidDisplay(void)
 {
 	LCD_GoTo(line_1,0);
 	LCD_WriteString("Stopwatch:");
@@ -60,6 +72,7 @@ void STOPWATCH_voidDisplay(void)  // akenou bydisplay bs no increment
 	LCD_GoTo(line_2,10);
 	LCD_WriteChar((u8CurrentSec/10)+48);
 	LCD_WriteChar((u8CurrentSec%10)+48);
+	return;
 }
 
 void STOPWATCH_voidSReset(void)
@@ -67,10 +80,6 @@ void STOPWATCH_voidSReset(void)
 	u8CurrentSec = 0;
 	u8CurrentMin = 0;
 	u8CurrentHr = 0;
-	STOPWATCH_voidDisplay();
+	return;
 }
 
-u8 STOPWATCH_u8CheckFlag(void)
-{
-	return u8StopwatchFlag;
-}

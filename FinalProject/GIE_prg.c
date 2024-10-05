@@ -13,10 +13,10 @@
 
 void GIE_Enable(void)
 {
-SET_BIT(SREG_Register,I);
+	SET_BIT(SREG_Register,I);
 }
 void GIE_Disable(void)
 {
-CLR_BIT(SREG_Register,I);
+	CLR_BIT(SREG_Register,I);
 }
 

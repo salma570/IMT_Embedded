@@ -13,7 +13,7 @@
 #include "TWI_Interface.h"
 #include "EXTI_int.h"
 #include "KPD_int.h"
-#include "RTC_int.h"
+//#include "RTC_int.h"
 #include "stopwatch_int.h"
 #include "RTOS/FreeRTOS.h"
 #include "RTOS/task.h"
@@ -24,30 +24,31 @@
 #define StopWatch  3
 #define CountDown  4
 
+static u8 flag = 0;
 void StopWatch_Task(void *ptr);
+void Countdown_Task(void *ptr);
 void StopWatch_EXTI(void);
-void StopWatch_Reset_EXTI(void);
 xTaskHandle StopWatchHandle=NULL;
 
 void main(void)
 {
 	//inits
 	TWI_voidMasterInit(1);
-//	RTC_voidInit();
+	//	RTC_voidInit();
 	LCD_init();
 	KPD_init();
 
+	//print welcome messages and start program
 	LCD_WriteString("Welcome To Program");
-	_delay_ms(2000);
-//	//current node
-//	RTC_val * current;
+	_delay_ms(1000);
+	//	//current node
+	//	RTC_val * current;
 	u8 mode = 0;
 
-	//print welcome messages and start program
 
 	//choose mode
 	//mode = KPD_GetKey();
-	mode=3;
+	mode=4;
 	switch (mode)
 	{
 	case TimeClock:
@@ -57,52 +58,33 @@ void main(void)
 
 		break;
 	case StopWatch:
-		//pause and resume stopwatch
+		//pause and resume stop watch
 		LCD_WriteCommand(lcd_Clear);
-		DIO_SetPinDirection(PORTD,PIN_2,Input); //push button on INT0
-		DIO_SetPinValue(PORTD,PIN_2,HIGH); //pull up
+		DIO_SetPinDirection(3,PIN_2,Input); //push button on INT0
+		DIO_SetPinValue(3,PIN_2,HIGH); //pull up
 		EXTI_SetTriggerMode();
 		EXTI0_CallBackFunc(StopWatch_EXTI);
 		EXTI_Enable(EXTI0);
-
-		//reset stopwatch
-		DIO_SetPinDirection(PORTD,PIN_3,Input); //push button on INT0
-		DIO_SetPinValue(PORTD,PIN_3,HIGH); //pull up
-		EXTI1_CallBackFunc(StopWatch_Reset_EXTI);
-		EXTI_Enable(EXTI1);
 		GIE_Enable();
-
 		xTaskCreate(StopWatch_Task,NULL,configMINIMAL_STACK_SIZE,NULL,0,&StopWatchHandle);
-		vTaskStartScheduler();
 		break;
 	case CountDown:
-
+		LCD_WriteCommand(lcd_Clear);
+		xTaskCreate(Countdown_Task,NULL,configMINIMAL_STACK_SIZE,NULL,0,NULL);
+		//interrupt for going to input (reset button)
+		//ok button inside the fn
 		break;
 	default:
 		break;
 	}
 
+	vTaskStartScheduler();
 
-	while(1){}
+	while(1)
+	{
+
+	}
 }
-
-
-//void StopWatch_Task(void *ptr)
-//{
-//	STOPWATCH_voidToggle();
-//	while(1)
-//	{
-//		if(STOPWATCH_u8CheckFlag()==1)
-//		{
-//			STOPWATCH_voidRun();
-//		}
-//		else
-//		{
-//			STOPWATCH_voidStop();
-//		}
-//		vTaskDelay(1000);
-//	}
-//}
 
 void StopWatch_Task(void *ptr)
 {
@@ -110,17 +92,16 @@ void StopWatch_Task(void *ptr)
 	{
 		STOPWATCH_voidRun();
 		STOPWATCH_voidDisplay();
-		vTaskDelay(1000);
+		vTaskDelay(500);
 	}
 }
-
-static u8 flag = 0;
 
 void StopWatch_EXTI(void)
 {
 	if (flag == 0)
 	{
 		vTaskSuspend(StopWatchHandle);
+		STOPWATCH_voidSReset();
 		flag=1;
 	}
 	else
@@ -128,13 +109,21 @@ void StopWatch_EXTI(void)
 		vTaskResume(StopWatchHandle);
 		flag=0;
 	}
+	return;
 }
 
-void StopWatch_Reset_EXTI(void)
+void Countdown_Task(void *ptr)
 {
-	STOPWATCH_voidSReset();
-	flag = 1 ;
-	vTaskSuspend(StopWatchHandle);
-	//stop task
-	//vTaskDelete(StopWatchHandle);
+	static u8 CDstate = 0;
+	DIO_SetPinDirection(1,4,Output);
+	while(1)
+	{
+		CDstate = CountDown_u8Run();
+		STOPWATCH_voidDisplay();
+		if(CDstate==1)
+		{
+			DIO_SetPinValue(1,4,HIGH);
+		}
+		vTaskDelay(500);
+	}
 }

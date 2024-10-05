@@ -1,12 +1,35 @@
-20:14:50 **** Incremental Build of configuration Debug for project FinalProject ****
+17:07:38 **** Incremental Build of configuration Debug for project FinalProject ****
 make all 
+Building file: ../main.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"main.d" -MT"main.o" -c -o "main.o" "../main.c"
+In file included from ../main.c:20:
+d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/lib/gcc/../../avr/include/util/delay.h:90:3: warning: #warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
+../main.c:33: warning: return type of 'main' is not 'int'
+../main.c: In function 'main':
+../main.c:42: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
+Finished building: ../main.c
+ 
+Building target: FinalProject.elf
+Invoking: AVR C Linker
+avr-gcc -Wl,-Map,FinalProject.map -mmcu=atmega32 -o "FinalProject.elf"  ./RTOS/croutine.o ./RTOS/heap_1.o ./RTOS/list.o ./RTOS/port.o ./RTOS/queue.o ./RTOS/tasks.o ./RTOS/timers.o  ./DIO_prg.o ./EXTI_prg.o ./GIE_prg.o ./KPD_prg.o ./LCD_prg.o ./RTC_prg.o ./TWI_prg.o ./WDG_prg.o ./main.o ./stopwatch_prg.o   
+Finished building target: FinalProject.elf
+ 
+Invoking: AVR Create Extended Listing
+avr-objdump -h -S FinalProject.elf  >"FinalProject.lss"
+Finished building: FinalProject.lss
+ 
+Create Flash image (ihex format)
+avr-objcopy -R .eeprom -R .fuse -R .lock -R .signature -O ihex FinalProject.elf  "FinalProject.hex"
+Finished building: FinalProject.hex
+ 
 Invoking: Print Size
 avr-size --format=avr --mcu=atmega32 FinalProject.elf
 AVR Memory Usage
 ----------------
 Device: atmega32
 
-Program:   22802 bytes (69.6% Full)
+Program:   22900 bytes (69.9% Full)
 (.text + .data + .bootloader)
 
 Data:        843 bytes (41.2% Full)
