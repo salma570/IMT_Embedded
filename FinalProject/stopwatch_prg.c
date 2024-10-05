@@ -39,7 +39,8 @@ int ALLtemp[5];
 static u8 count_button_pressed =0; //OK button
 static u8 increment_Current_digit =0;
 
-void CountDownu8_SetTemp(void){
+void CountDownu8_SetTemp(void)
+{
 	int x = GetCurrentButton_count(); //ok button 
 	if(x>6){
 	    CountDownu8_validateTemp(); 
@@ -84,13 +85,15 @@ void CountDownu8_validateTemp(void)
 	u8tempsec_1 =0;
 	u8tempsec_2 =0;
 }
-void CountDownu8_SetCurrent_Values(void){
+void CountDownu8_SetCurrent_Values(void)
+{
 	u8CurrentHr = u8tempHr_1+ u8tempHr_2;
 	u8CurrentMin = u8tempmin_1+u8tempmin_2;
 	u8CurrentSec = u8tempmsec_1+u8tempmsec_2;
 }
 
-u8 GetCurrentButton_count(void){
+u8 GetCurrentButton_count(void)
+{
 	return count_button_pressed;
 }
 
