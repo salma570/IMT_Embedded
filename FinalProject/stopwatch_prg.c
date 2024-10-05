@@ -159,6 +159,27 @@ void STOPWATCH_voidDisplay(void)
 	return;
 }
 
+void CountDown_voidDisplay(void)
+{
+	LCD_GoTo(line_1,0);
+	LCD_WriteString("Countdown:");
+	/*Hours*/
+	LCD_GoTo(line_2,0);
+	LCD_WriteChar((u8CurrentHr/10)+48);
+	LCD_WriteChar((u8CurrentHr%10)+48);
+	LCD_WriteChar(':');
+	/*Minutes*/
+	LCD_GoTo(line_2,5);
+	LCD_WriteChar((u8CurrentMin/10)+48);
+	LCD_WriteChar((u8CurrentMin%10)+48);
+	LCD_WriteChar(':');
+	/*Seconds*/
+	LCD_GoTo(line_2,10);
+	LCD_WriteChar((u8CurrentSec/10)+48);
+	LCD_WriteChar((u8CurrentSec%10)+48);
+	return;
+}
+
 void STOPWATCH_voidSReset(void)
 {
 	u8CurrentSec = 0;
