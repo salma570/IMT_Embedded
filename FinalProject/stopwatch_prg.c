@@ -26,15 +26,15 @@ static u8 u8tempmsec_2 = 0;
 
 
 //khalihom array ahsan 3l4an we need pointers mi4 hynfa3 n3mel pass by value
-int ALLtemp[5];
+int *ALLtemp[6];
 
 //initialise array values
-&ALLtemp[0]=u8tempHr_1;
-&ALLtemp[1]=u8tempHr_2;
-&ALLtemp[2]=u8tempmin_1;
-&ALLtemp[3]=u8tempmin_2;
-&ALLtemp[4]=u8tempsec_1;
-&ALLtemp[5]=u8tempsec_2;
+ALLtemp[0]=&u8tempHr_1;
+ALLtemp[1]=&u8tempHr_2;
+ALLtemp[2]=&u8tempmin_1;
+ALLtemp[3]=&u8tempmin_2;
+ALLtemp[4]=&u8tempsec_1;
+ALLtemp[5]=&u8tempsec_2;
 
 static u8 count_button_pressed =0; //OK button
 static u8 increment_Current_digit =0;
@@ -53,10 +53,10 @@ void CountDownu8_SetTemp(void)
 void ValueSet(void)
 {
 	//reset if the current number is 9
-	if(ALLtemp[count_button_pressed]>=9){
-		ALLtemp[count_button_pressed] =0;
+	if(*ALLtemp[count_button_pressed]>=9){
+		*ALLtemp[count_button_pressed] =0;
 	}else{//otherwise increment it
-		ALLtemp[count_button_pressed]++;
+		*ALLtemp[count_button_pressed]++;
 	}
 }
 
