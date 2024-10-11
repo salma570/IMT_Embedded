@@ -28,6 +28,7 @@ static u8 flag = 0;
 void StopWatch_Task(void *ptr);
 void Countdown_Task(void *ptr);
 void StopWatch_EXTI(void);
+void Countdown_Task(void *ptr);
 xTaskHandle StopWatchHandle=NULL;
 
 void main(void)
@@ -73,6 +74,7 @@ void main(void)
 		xTaskCreate(Countdown_Task,NULL,configMINIMAL_STACK_SIZE,NULL,0,NULL);
 		//interrupt for going to input (reset button)
 		//ok button inside the fn
+		// increment button 
 		break;
 	default:
 		break;
@@ -95,6 +97,7 @@ void StopWatch_Task(void *ptr)
 		vTaskDelay(500);
 	}
 }
+
 
 void StopWatch_EXTI(void)
 {
