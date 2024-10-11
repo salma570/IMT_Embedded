@@ -13,7 +13,7 @@
 #include "TWI_Interface.h"
 #include "EXTI_int.h"
 #include "KPD_int.h"
-#include "RTC_int.h"
+//#include "RTC_int.h"
 #include "stopwatch_int.h"
 #include "RTOS/FreeRTOS.h"
 #include "RTOS/task.h"
@@ -29,13 +29,15 @@ void StopWatch_Task(void *ptr);
 void Countdown_Task(void *ptr);
 void StopWatch_EXTI(void);
 void Countdown_Task(void *ptr);
+void CD_IncrementTemp_EXTI(void);
+void CD_IncrementOK_EXTI(void);
 xTaskHandle StopWatchHandle=NULL;
 
 void main(void)
 {
 	//inits
 	TWI_voidMasterInit(1);
-	RTC_voidInit();
+//	RTC_voidInit();
 	LCD_init();
 	KPD_init();
 
@@ -68,19 +70,40 @@ void main(void)
 		EXTI_Enable(EXTI0);
 		GIE_Enable();
 		xTaskCreate(StopWatch_Task,NULL,configMINIMAL_STACK_SIZE,NULL,0,&StopWatchHandle);
+		vTaskStartScheduler();
 		break;
 	case CountDown:
 		LCD_WriteCommand(lcd_Clear);
+		//prompt user to enter value to countdown from
+		//using 2 buttons
+		//but1: increments and rolls back
+		DIO_SetPinDirection(3,PIN_2,Input); //push button on INT0
+		DIO_SetPinValue(3,PIN_2,HIGH); //pull up
+		EXTI0_CallBackFunc(CD_IncrementTemp_EXTI); //increment
+		//but2: to submit
+		DIO_SetPinDirection(3,PIN_3,Input); //push button on INT1
+		DIO_SetPinValue(3,PIN_3,HIGH); //pull up
+		EXTI1_CallBackFunc(CD_IncrementOK_EXTI); //okays
+		//enable interrupts
+		EXTI_SetTriggerMode();
+		EXTI_Enable(EXTI0);
+		EXTI_Enable(EXTI1);
+		GIE_Enable();
+		//validation happens, if validation fails -> reset
+		init_alltemp();
+		while(GetCurrentButton_count()<=6) //no action until user fully enters his data
+		{
+			CountDown_voidTempDisplay();
+		}
+		CountDownu8_SetCurrent_Values();
+		//now the last okay is pressed and task should start
 		xTaskCreate(Countdown_Task,NULL,configMINIMAL_STACK_SIZE,NULL,0,NULL);
+		vTaskStartScheduler();
 		//interrupt for going to input (reset button)
-		//ok button inside the fn
-		// increment button 
 		break;
 	default:
 		break;
 	}
-
-	vTaskStartScheduler();
 
 	while(1)
 	{
@@ -122,11 +145,21 @@ void Countdown_Task(void *ptr)
 	while(1)
 	{
 		CDstate = CountDown_u8Run();
-		STOPWATCH_voidDisplay();
+		CountDown_voidDisplay();
 		if(CDstate==1)
 		{
 			DIO_SetPinValue(1,4,HIGH);
 		}
 		vTaskDelay(500);
 	}
+}
+
+void CD_IncrementTemp_EXTI(void)
+{
+	CountDown_u8IncrementCurrentTemp();
+}
+
+void CD_IncrementOK_EXTI(void)
+{
+	CountDown_u8IncrementOK();
 }

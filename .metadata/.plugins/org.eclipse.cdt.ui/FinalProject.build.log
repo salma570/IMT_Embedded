@@ -1,104 +1,26 @@
-11:00:16 **** Build of configuration Debug for project FinalProject ****
+17:22:53 **** Incremental Build of configuration Debug for project FinalProject ****
 make all 
-Building file: ../RTOS/croutine.c
-Invoking: AVR Compiler
-avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"RTOS/croutine.d" -MT"RTOS/croutine.o" -c -o "RTOS/croutine.o" "../RTOS/croutine.c"
-Finished building: ../RTOS/croutine.c
- 
-Building file: ../RTOS/heap_1.c
-Invoking: AVR Compiler
-avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"RTOS/heap_1.d" -MT"RTOS/heap_1.o" -c -o "RTOS/heap_1.o" "../RTOS/heap_1.c"
-Finished building: ../RTOS/heap_1.c
- 
-Building file: ../RTOS/list.c
-Invoking: AVR Compiler
-avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"RTOS/list.d" -MT"RTOS/list.o" -c -o "RTOS/list.o" "../RTOS/list.c"
-Finished building: ../RTOS/list.c
- 
-Building file: ../RTOS/port.c
-Invoking: AVR Compiler
-avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"RTOS/port.d" -MT"RTOS/port.o" -c -o "RTOS/port.o" "../RTOS/port.c"
-Finished building: ../RTOS/port.c
- 
-Building file: ../RTOS/queue.c
-Invoking: AVR Compiler
-avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"RTOS/queue.d" -MT"RTOS/queue.o" -c -o "RTOS/queue.o" "../RTOS/queue.c"
-Finished building: ../RTOS/queue.c
- 
-Building file: ../RTOS/tasks.c
-Invoking: AVR Compiler
-avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"RTOS/tasks.d" -MT"RTOS/tasks.o" -c -o "RTOS/tasks.o" "../RTOS/tasks.c"
-../RTOS/tasks.c: In function 'xTaskGenericCreate':
-../RTOS/tasks.c:470: warning: cast from pointer to integer of different size
-../RTOS/tasks.c:470: warning: cast to pointer from integer of different size
-Finished building: ../RTOS/tasks.c
- 
-Building file: ../RTOS/timers.c
-Invoking: AVR Compiler
-avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"RTOS/timers.d" -MT"RTOS/timers.o" -c -o "RTOS/timers.o" "../RTOS/timers.c"
-Finished building: ../RTOS/timers.c
- 
-Building file: ../DIO_prg.c
-Invoking: AVR Compiler
-avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"DIO_prg.d" -MT"DIO_prg.o" -c -o "DIO_prg.o" "../DIO_prg.c"
-Finished building: ../DIO_prg.c
- 
-Building file: ../EXTI_prg.c
-Invoking: AVR Compiler
-avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"EXTI_prg.d" -MT"EXTI_prg.o" -c -o "EXTI_prg.o" "../EXTI_prg.c"
-Finished building: ../EXTI_prg.c
- 
-Building file: ../GIE_prg.c
-Invoking: AVR Compiler
-avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"GIE_prg.d" -MT"GIE_prg.o" -c -o "GIE_prg.o" "../GIE_prg.c"
-Finished building: ../GIE_prg.c
- 
-Building file: ../KPD_prg.c
-Invoking: AVR Compiler
-avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"KPD_prg.d" -MT"KPD_prg.o" -c -o "KPD_prg.o" "../KPD_prg.c"
-In file included from ../KPD_prg.c:13:
-d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/lib/gcc/../../avr/include/util/delay.h:90:3: warning: #warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
-Finished building: ../KPD_prg.c
- 
-Building file: ../LCD_prg.c
-Invoking: AVR Compiler
-avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"LCD_prg.d" -MT"LCD_prg.o" -c -o "LCD_prg.o" "../LCD_prg.c"
-In file included from ../LCD_prg.c:12:
-d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/lib/gcc/../../avr/include/util/delay.h:90:3: warning: #warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
-Finished building: ../LCD_prg.c
- 
-Building file: ../RTC_prg.c
-Invoking: AVR Compiler
-avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"RTC_prg.d" -MT"RTC_prg.o" -c -o "RTC_prg.o" "../RTC_prg.c"
-In file included from ../RTC_prg.c:13:
-d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/lib/gcc/../../avr/include/util/delay.h:90:3: warning: #warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
-Finished building: ../RTC_prg.c
- 
-Building file: ../TWI_prg.c
-Invoking: AVR Compiler
-avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"TWI_prg.d" -MT"TWI_prg.o" -c -o "TWI_prg.o" "../TWI_prg.c"
-Finished building: ../TWI_prg.c
- 
-Building file: ../WDG_prg.c
-Invoking: AVR Compiler
-avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"WDG_prg.d" -MT"WDG_prg.o" -c -o "WDG_prg.o" "../WDG_prg.c"
-Finished building: ../WDG_prg.c
- 
 Building file: ../main.c
 Invoking: AVR Compiler
 avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"main.d" -MT"main.o" -c -o "main.o" "../main.c"
 In file included from ../main.c:20:
 d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/lib/gcc/../../avr/include/util/delay.h:90:3: warning: #warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
-../main.c:33: warning: return type of 'main' is not 'int'
+../main.c:36: warning: return type of 'main' is not 'int'
 ../main.c: In function 'main':
-../main.c:42: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
+../main.c:45: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
+../main.c: In function 'Countdown_Task':
+../main.c:148: warning: implicit declaration of function 'CountDown_voidDisplay'
 Finished building: ../main.c
  
 Building file: ../stopwatch_prg.c
 Invoking: AVR Compiler
 avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"stopwatch_prg.d" -MT"stopwatch_prg.o" -c -o "stopwatch_prg.o" "../stopwatch_prg.c"
+../stopwatch_prg.c: In function 'CountDown_voidDisplay':
+../stopwatch_prg.c:155: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
+../stopwatch_prg.c: In function 'CountDown_voidTempDisplay':
+../stopwatch_prg.c:176: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
 ../stopwatch_prg.c: In function 'STOPWATCH_voidDisplay':
-../stopwatch_prg.c:60: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
+../stopwatch_prg.c:217: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
 Finished building: ../stopwatch_prg.c
  
 Building target: FinalProject.elf
@@ -120,15 +42,15 @@ AVR Memory Usage
 ----------------
 Device: atmega32
 
-Program:   22904 bytes (69.9% Full)
+Program:   23844 bytes (72.8% Full)
 (.text + .data + .bootloader)
 
-Data:        843 bytes (41.2% Full)
+Data:        872 bytes (42.6% Full)
 (.data + .bss + .noinit)
 
 
 Finished building: sizedummy
  
 
-11:00:24 Build Finished (took 7s.455ms)
+17:22:54 Build Finished (took 1s.140ms)
 
