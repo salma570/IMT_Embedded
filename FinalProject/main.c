@@ -13,7 +13,7 @@
 #include "TWI_Interface.h"
 #include "EXTI_int.h"
 #include "KPD_int.h"
-//#include "RTC_int.h"
+#include "RTC_int.h"
 #include "stopwatch_int.h"
 #include "RTOS/FreeRTOS.h"
 #include "RTOS/task.h"
@@ -34,7 +34,7 @@ void main(void)
 {
 	//inits
 	TWI_voidMasterInit(1);
-	//	RTC_voidInit();
+	RTC_voidInit();
 	LCD_init();
 	KPD_init();
 

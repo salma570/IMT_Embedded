@@ -12,8 +12,8 @@
 
 void TWI_voidMasterInit(u8 Copy_MasterAddress)
 {
-	//200kHz clk speed
-	TWBR=12;
+	//100kHz clk speed
+	TWBR=32;
 	CLR_BIT(TWSR,TWSR_TWPS0);
 	CLR_BIT(TWSR,TWSR_TWPS1);
 
