@@ -34,7 +34,6 @@ void CD_IncrementTemp_EXTI(void);
 void CD_IncrementOK_EXTI(void);
 void Alarm_IncrementTemp_EXTI(void);
 void Alarm_IncrementOK_EXTI(void);
-
 xTaskHandle StopWatchHandle=NULL;
 
 void main(void)
