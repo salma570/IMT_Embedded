@@ -15,6 +15,7 @@
 #include "KPD_int.h"
 //#include "RTC_int.h"
 #include "stopwatch_int.h"
+#include "Alarm_int.h"
 #include "RTOS/FreeRTOS.h"
 #include "RTOS/task.h"
 #include "util/delay.h"
@@ -31,13 +32,16 @@ void StopWatch_EXTI(void);
 void Countdown_Task(void *ptr);
 void CD_IncrementTemp_EXTI(void);
 void CD_IncrementOK_EXTI(void);
+void Alarm_IncrementTemp_EXTI(void);
+void Alarm_IncrementOK_EXTI(void);
+
 xTaskHandle StopWatchHandle=NULL;
 
 void main(void)
 {
 	//inits
 	TWI_voidMasterInit(1);
-//	RTC_voidInit();
+	//	RTC_voidInit();
 	LCD_init();
 	KPD_init();
 
@@ -58,7 +62,36 @@ void main(void)
 
 		break;
 	case Alarm:
-
+		LCD_WriteCommand(lcd_Clear);
+		//prompt user to enter value to Set Alarm
+		//using 2 buttons
+		//but1: increments and rolls back
+		DIO_SetPinDirection(3,PIN_2,Input); //push button on INT0
+		DIO_SetPinValue(3,PIN_2,HIGH); //pull up
+		EXTI0_CallBackFunc(Alarm_IncrementTemp_EXTI); //increment
+		//but2: to submit
+		DIO_SetPinDirection(3,PIN_3,Input); //push button on INT1
+		DIO_SetPinValue(3,PIN_3,HIGH); //pull up
+		EXTI1_CallBackFunc(Alarm_IncrementOK_EXTI); //okays
+		//enable interrupts
+		EXTI_SetTriggerMode();
+		EXTI_Enable(EXTI0);
+		EXTI_Enable(EXTI1);
+		GIE_Enable();
+		Alarm_InitTemp();
+		while(Alarm_u8GetCurrentButtonCount()<=4) //no action until user fully enters his data
+		{
+			Alarm_voidTempDisplay();
+		}
+		Alarm_AdjustTime();
+		while(1)
+		{
+			if(RTC_voidGetHour()==Alarm_GetHr() && RTC_voidGetMin()==Alarm_GetMin())
+			{
+				DIO_SetPinDirection(1,4,Output);
+				DIO_SetPinValue(1,4,HIGH);
+			}
+		}
 		break;
 	case StopWatch:
 		//pause and resume stop watch
@@ -121,7 +154,6 @@ void StopWatch_Task(void *ptr)
 	}
 }
 
-
 void StopWatch_EXTI(void)
 {
 	if (flag == 0)
@@ -162,4 +194,14 @@ void CD_IncrementTemp_EXTI(void)
 void CD_IncrementOK_EXTI(void)
 {
 	CountDown_u8IncrementOK();
+}
+
+void Alarm_IncrementTemp_EXTI(void)
+{
+	Alarm_u8IncrementCurrentTemp();
+}
+
+void Alarm_IncrementOK_EXTI(void)
+{
+	Alarm_voidIncrementOK();
 }
