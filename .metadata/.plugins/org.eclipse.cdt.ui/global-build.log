@@ -1,32 +1,30 @@
-05:06:43 **** Incremental Build of configuration Debug for project FinalProject ****
+06:13:13 **** Incremental Build of configuration Debug for project FinalProject ****
 make all 
-Building file: ../Alarm_prg.c
+Building file: ../RTC_prg.c
 Invoking: AVR Compiler
-avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"Alarm_prg.d" -MT"Alarm_prg.o" -c -o "Alarm_prg.o" "../Alarm_prg.c"
-Finished building: ../Alarm_prg.c
- 
-Building file: ../main.c
-Invoking: AVR Compiler
-avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"main.d" -MT"main.o" -c -o "main.o" "../main.c"
-In file included from ../main.c:20:
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"RTC_prg.d" -MT"RTC_prg.o" -c -o "RTC_prg.o" "../RTC_prg.c"
+In file included from ../RTC_prg.c:14:
 d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/lib/gcc/../../avr/include/util/delay.h:90:3: warning: #warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
-../main.c:36: warning: return type of 'main' is not 'int'
-../main.c: In function 'main':
-../main.c:45: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
-../main.c: In function 'Countdown_Task':
-../main.c:147: warning: implicit declaration of function 'CountDown_voidDisplay'
-Finished building: ../main.c
- 
-Building file: ../stopwatch_prg.c
-Invoking: AVR Compiler
-avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"stopwatch_prg.d" -MT"stopwatch_prg.o" -c -o "stopwatch_prg.o" "../stopwatch_prg.c"
-../stopwatch_prg.c: In function 'CountDown_voidDisplay':
-../stopwatch_prg.c:117: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
-../stopwatch_prg.c: In function 'CountDown_voidTempDisplay':
-../stopwatch_prg.c:138: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
-../stopwatch_prg.c: In function 'STOPWATCH_voidDisplay':
-../stopwatch_prg.c:179: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
-Finished building: ../stopwatch_prg.c
+../RTC_prg.c: In function 'RTC_voidInit':
+../RTC_prg.c:22: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
+../RTC_prg.c:26: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
+../RTC_prg.c:30: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
+../RTC_prg.c:34: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
+../RTC_prg.c: In function 'RTC_Write':
+../RTC_prg.c:163: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
+../RTC_prg.c:169: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
+../RTC_prg.c:175: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
+../RTC_prg.c:181: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
+../RTC_prg.c:188: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
+../RTC_prg.c: In function 'RTC_Read':
+../RTC_prg.c:202: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
+../RTC_prg.c:209: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
+../RTC_prg.c:215: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
+../RTC_prg.c:224: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
+../RTC_prg.c:230: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
+../RTC_prg.c:238: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
+../RTC_prg.c:243: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
+Finished building: ../RTC_prg.c
  
 Building target: FinalProject.elf
 Invoking: AVR C Linker
@@ -47,10 +45,27 @@ AVR Memory Usage
 ----------------
 Device: atmega32
 
-Program:   23844 bytes (72.8% Full)
+Program:   30250 bytes (92.3% Full)
 (.text + .data + .bootloader)
 
-Data:        872 bytes (42.6% Full)
+Data:       1103 bytes (53.9% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 
+06:15:04 **** Incremental Build of configuration Debug for project FinalProject ****
+make all 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega32 FinalProject.elf
+AVR Memory Usage
+----------------
+Device: atmega32
+
+Program:   30250 bytes (92.3% Full)
+(.text + .data + .bootloader)
+
+Data:       1103 bytes (53.9% Full)
 (.data + .bss + .noinit)
 
 

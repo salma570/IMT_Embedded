@@ -14,6 +14,7 @@ void CountDownu8_SetCurrent_Values(void);
 u8 GetCurrentButton_count(void);
 
 void CountDown_voidTempDisplay(void);
+void CountDown_voidDisplay(void);
 void init_alltemp(void);
 void CountDown_u8IncrementCurrentTemp(void);
 void CountDown_u8IncrementOK(void);
