@@ -13,12 +13,16 @@
 #include "TWI_Interface.h"
 #include "EXTI_int.h"
 #include "KPD_int.h"
-//#include "RTC_int.h"
+#include "RTC_int.h"
 #include "stopwatch_int.h"
 #include "Alarm_int.h"
 #include "RTOS/FreeRTOS.h"
 #include "RTOS/task.h"
 #include "util/delay.h"
+
+#ifndef NULL
+#define NULL ((void*)0)
+#endif
 
 #define TimeClock  1
 #define Alarm  	   2
@@ -34,18 +38,21 @@ void CD_IncrementTemp_EXTI(void);
 void CD_IncrementOK_EXTI(void);
 void Alarm_IncrementTemp_EXTI(void);
 void Alarm_IncrementOK_EXTI(void);
-
 xTaskHandle StopWatchHandle=NULL;
 
 void main(void)
 {
 	//inits
-	TWI_voidMasterInit(1);
-	//	RTC_voidInit();
 	LCD_init();
 	KPD_init();
+	TWI_voidMasterInit(1);
+	LCD_WriteString("Init RTC");
+	_delay_ms(1000);
+	RTC_voidInit();
 
 	//print welcome messages and start program
+	LCD_WriteCommand(lcd_Clear);
+	_delay_ms(1000);
 	LCD_WriteString("Welcome To Program");
 	_delay_ms(1000);
 	//	//current node
