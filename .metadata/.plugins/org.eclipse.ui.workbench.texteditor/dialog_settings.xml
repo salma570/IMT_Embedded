@@ -6,20 +6,20 @@
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="" key="selection"/>
+		<item value="CountDownu8_validateTemp" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="CountDownu8_validateTemp"/>
+			<item value="GetCurrentButton_count"/>
 			<item value="util"/>
 			<item value="StopWatch_Task"/>
 			<item value="vTaskDelete"/>
 			<item value="Copy_u8Device"/>
 			<item value="vTaskResume"/>
 			<item value="vTask"/>
-			<item value="EXTI0"/>
-			<item value="exti0"/>
 		</list>
 		<list key="replacehistory">
 			<item value="PORTA"/>

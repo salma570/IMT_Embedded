@@ -1,5 +1,10 @@
-17:22:53 **** Incremental Build of configuration Debug for project FinalProject ****
+05:06:43 **** Incremental Build of configuration Debug for project FinalProject ****
 make all 
+Building file: ../Alarm_prg.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"Alarm_prg.d" -MT"Alarm_prg.o" -c -o "Alarm_prg.o" "../Alarm_prg.c"
+Finished building: ../Alarm_prg.c
+ 
 Building file: ../main.c
 Invoking: AVR Compiler
 avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"main.d" -MT"main.o" -c -o "main.o" "../main.c"
@@ -9,23 +14,23 @@ d:/hpnew/downloads/00-tools/imt tools/sdk/imt_sdk_win_64/winavr/lib/gcc/../../av
 ../main.c: In function 'main':
 ../main.c:45: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
 ../main.c: In function 'Countdown_Task':
-../main.c:148: warning: implicit declaration of function 'CountDown_voidDisplay'
+../main.c:147: warning: implicit declaration of function 'CountDown_voidDisplay'
 Finished building: ../main.c
  
 Building file: ../stopwatch_prg.c
 Invoking: AVR Compiler
 avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=8000000UL -MMD -MP -MF"stopwatch_prg.d" -MT"stopwatch_prg.o" -c -o "stopwatch_prg.o" "../stopwatch_prg.c"
 ../stopwatch_prg.c: In function 'CountDown_voidDisplay':
-../stopwatch_prg.c:155: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
+../stopwatch_prg.c:117: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
 ../stopwatch_prg.c: In function 'CountDown_voidTempDisplay':
-../stopwatch_prg.c:176: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
+../stopwatch_prg.c:138: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
 ../stopwatch_prg.c: In function 'STOPWATCH_voidDisplay':
-../stopwatch_prg.c:217: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
+../stopwatch_prg.c:179: warning: pointer targets in passing argument 1 of 'LCD_WriteString' differ in signedness
 Finished building: ../stopwatch_prg.c
  
 Building target: FinalProject.elf
 Invoking: AVR C Linker
-avr-gcc -Wl,-Map,FinalProject.map -mmcu=atmega32 -o "FinalProject.elf"  ./RTOS/croutine.o ./RTOS/heap_1.o ./RTOS/list.o ./RTOS/port.o ./RTOS/queue.o ./RTOS/tasks.o ./RTOS/timers.o  ./DIO_prg.o ./EXTI_prg.o ./GIE_prg.o ./KPD_prg.o ./LCD_prg.o ./RTC_prg.o ./TWI_prg.o ./WDG_prg.o ./main.o ./stopwatch_prg.o   
+avr-gcc -Wl,-Map,FinalProject.map -mmcu=atmega32 -o "FinalProject.elf"  ./RTOS/croutine.o ./RTOS/heap_1.o ./RTOS/list.o ./RTOS/port.o ./RTOS/queue.o ./RTOS/tasks.o ./RTOS/timers.o  ./Alarm_prg.o ./DIO_prg.o ./EXTI_prg.o ./GIE_prg.o ./KPD_prg.o ./LCD_prg.o ./RTC_prg.o ./TWI_prg.o ./WDG_prg.o ./main.o ./stopwatch_prg.o   
 Finished building target: FinalProject.elf
  
 Invoking: AVR Create Extended Listing
