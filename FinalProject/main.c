@@ -49,9 +49,9 @@ void main(void)
 	LCD_init();
 	KPD_init();
 	TWI_voidMasterInit(1);
-//	LCD_WriteString("Init RTC");
-//	_delay_ms(1000);
-//	RTC_voidInit();
+	LCD_WriteString("Init RTC");
+	_delay_ms(1000);
+	RTC_voidInit();
 	EXTI_SetTriggerMode();
 	GIE_Enable();
 

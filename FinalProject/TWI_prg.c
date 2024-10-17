@@ -41,6 +41,19 @@ void TWI_voidSlaveInit(u8 Copy_SlaveAddress)
 	SET_BIT(TWCR,TWCR_TWEN);
 }
 
+void TWI_Reset() //TWI is stuck or unresponsive.
+{
+    // Disable the TWI (set the TWEN bit to 0)
+    CLR_BIT(TWCR, TWCR_TWEN);
+
+    // You might want to wait a bit to ensure TWI is properly disabled
+    _delay_ms(1);
+
+    // Enable the TWI again (set the TWEN bit to 1)
+    SET_BIT(TWCR, TWCR_TWEN);
+}
+
+
 void TWI_voidStartCondition() {
     // Check if the bus is busy
     if (GET_BIT(TWCR, TWCR_TWSTA)) {

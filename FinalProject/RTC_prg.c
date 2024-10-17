@@ -18,9 +18,6 @@ void RTC_voidInit(void) //can add option to user to choose mode 12 or 24
 {
 	//enable oscillator
 	//CLR_BIT(Sec_Reg,7);
-	LCD_WriteCommand(lcd_Clear);
-	LCD_WriteString("Read");
-	_delay_ms(1000);
 	u8 oscillator_enable = ((RTC_Read(Sec_Reg))&(0b01111111));
 
 	LCD_WriteCommand(lcd_Clear);
@@ -31,6 +28,10 @@ void RTC_voidInit(void) //can add option to user to choose mode 12 or 24
 	//choose 24-hour mode -> by default: can be changed later by user
 	//CLR_BIT(Hrs_Reg,6);
 	u8 mode_selector_24 = (RTC_Read(Hrs_Reg))&(0b10111111);
+	TWI_Reset();
+	LCD_WriteCommand(lcd_Clear);
+	LCD_WriteString("Write2");
+	_delay_ms(1000);
 	RTC_Write(Hrs_Reg,mode_selector_24);
 }
 
@@ -90,12 +91,6 @@ u8   RTC_Read(u8 Copy_u16RegAddress) //MCU reads from RTC
 	u8 SlaveAddress = 0b01101000;
 
 	//start
-	u8 status = TWI_u8GetStatus();
-	char statusStr[4];
-	sprintf(statusStr, "%02X", status);
-	LCD_WriteCommand(lcd_Clear);
-	LCD_WriteString(statusStr);
-	_delay_ms(1000);
 	TWI_voidStartCondition();
 	//status 08 -> start cond transmitted
 
@@ -108,7 +103,7 @@ u8   RTC_Read(u8 Copy_u16RegAddress) //MCU reads from RTC
 	//0x28: Data byte transmitted, ACK received.
 
 	//delay
-	//	_delay_us(10); //lw bazet emsa7o da
+	_delay_us(10); //lw bazet emsa7o da
 
 	//repeated start
 	TWI_voidStartCondition();

@@ -5,6 +5,8 @@ void TWI_voidMasterInit(u8 Copy_MasterAddress);
 
 void TWI_voidSlaveInit(u8 Copy_SlaveAddress);
 
+void TWI_Reset();
+
 void TWI_voidStartCondition();
 
 void TWI_voidSendSlaveAddressWithWrite(u8 Copy_u8SlaveAddress);
