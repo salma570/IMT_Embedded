@@ -133,7 +133,6 @@ void Alarm_DisplaySet(void)
 	LCD_GoTo(line_2,12);
 	LCD_WriteChar(MinTens+48);
 	LCD_WriteChar(MinUnits+48);
-	LCD_WriteChar(':');
 	return;
 }
 

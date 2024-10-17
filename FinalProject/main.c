@@ -38,7 +38,10 @@ void CD_IncrementTemp_EXTI(void);
 void CD_IncrementOK_EXTI(void);
 void Alarm_IncrementTemp_EXTI(void);
 void Alarm_IncrementOK_EXTI(void);
+void increment_mode_exti(void);
+void end_prg_exti(void);
 xTaskHandle StopWatchHandle=NULL;
+static u8 mode;
 
 void main(void)
 {
@@ -46,23 +49,62 @@ void main(void)
 	LCD_init();
 	KPD_init();
 	TWI_voidMasterInit(1);
-	LCD_WriteString("Init RTC");
-	_delay_ms(1000);
-	RTC_voidInit();
+//	LCD_WriteString("Init RTC");
+//	_delay_ms(1000);
+//	RTC_voidInit();
+	EXTI_SetTriggerMode();
+	GIE_Enable();
+
+	//but1: used for increments
+	DIO_SetPinDirection(3,PIN_2,Input);
+	DIO_SetPinValue(3,PIN_2,HIGH); //pull up
+	//but2: to submit
+	DIO_SetPinDirection(3,PIN_3,Input);
+	DIO_SetPinValue(3,PIN_3,HIGH); //pull up
+	//but3: end program
+	DIO_SetPinDirection(1,PIN_2,Input);
+	DIO_SetPinValue(1,PIN_2,HIGH); //pull up
+	EXTI2_CallBackFunc(end_prg_exti);
+	EXTI_Enable(EXTI2);
 
 	//print welcome messages and start program
 	LCD_WriteCommand(lcd_Clear);
 	_delay_ms(1000);
 	LCD_WriteString("Welcome To Program");
 	_delay_ms(1000);
+	LCD_WriteCommand(lcd_Clear);
+	LCD_WriteString("Adjust Date & Time");
+	_delay_ms(1000);
+	LCD_WriteCommand(lcd_Clear);
+	///WRITE RTC ADJUST LOGIC HERE
+	LCD_WriteString("Choose Mode: ");
+	_delay_ms(1000);
+	LCD_WriteCommand(lcd_Clear);
+	LCD_WriteString("1.RTC 2.Alarm");
+	LCD_GoTo(line_2,0);
+	LCD_WriteString("3.StopWatch 4.CD");
+	_delay_ms(2000);
+	LCD_WriteCommand(lcd_Clear);
+	LCD_WriteString("Choose, press ok");
+	LCD_GoTo(line_2,0);
+	LCD_WriteString("Choice: ");
+
+	EXTI0_CallBackFunc(increment_mode_exti); //increment
+	EXTI_Enable(EXTI0);
+	static u8 pressed_ok = 1;
+	mode = 1;
+	while(pressed_ok==1)
+	{
+		LCD_GoTo(line_2,11);
+		LCD_WriteChar((mode+48));
+		pressed_ok = DIO_GetPinValue(3,PIN_3);
+		_delay_ms(50);
+	}
+	EXTI_Disable(EXTI0);
+
 	//	//current node
 	//	RTC_val * current;
-	u8 mode = 0;
-
-
-	//choose mode
-	//mode = KPD_GetKey();
-	mode=4;
+	//	mode=4;
 	switch (mode)
 	{
 	case TimeClock:
@@ -81,10 +123,8 @@ void main(void)
 		DIO_SetPinValue(3,PIN_3,HIGH); //pull up
 		EXTI1_CallBackFunc(Alarm_IncrementOK_EXTI); //okays
 		//enable interrupts
-		EXTI_SetTriggerMode();
 		EXTI_Enable(EXTI0);
 		EXTI_Enable(EXTI1);
-		GIE_Enable();
 		Alarm_InitTemp();
 		while(Alarm_u8GetCurrentButtonCount()<=4) //no action until user fully enters his data
 		{
@@ -150,7 +190,19 @@ void main(void)
 
 	}
 }
-
+void end_prg_exti(void)
+{
+	DIO_SetPinValue(1,4,LOW);
+	LCD_WriteCommand(lcd_Clear);
+	LCD_WriteString("Program Ended");
+	while(1){}
+}
+void increment_mode_exti(void)
+{
+	mode ++;
+	if(mode>4)
+		mode = 1;
+}
 void StopWatch_Task(void *ptr)
 {
 	while(1)
@@ -160,7 +212,6 @@ void StopWatch_Task(void *ptr)
 		vTaskDelay(500);
 	}
 }
-
 void StopWatch_EXTI(void)
 {
 	if (flag == 0)
@@ -176,7 +227,6 @@ void StopWatch_EXTI(void)
 	}
 	return;
 }
-
 void Countdown_Task(void *ptr)
 {
 	static u8 CDstate = 0;
@@ -192,22 +242,18 @@ void Countdown_Task(void *ptr)
 		vTaskDelay(500);
 	}
 }
-
 void CD_IncrementTemp_EXTI(void)
 {
 	CountDown_u8IncrementCurrentTemp();
 }
-
 void CD_IncrementOK_EXTI(void)
 {
 	CountDown_u8IncrementOK();
 }
-
 void Alarm_IncrementTemp_EXTI(void)
 {
 	Alarm_u8IncrementCurrentTemp();
 }
-
 void Alarm_IncrementOK_EXTI(void)
 {
 	Alarm_voidIncrementOK();

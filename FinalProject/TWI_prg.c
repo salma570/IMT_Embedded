@@ -9,6 +9,8 @@
 #include "BIT_MATH.h"
 #include "TWI_Register.h"
 #include "TWI_Interface.h"
+#include "LCD_int.h"
+#include "util/delay.h"
 
 void TWI_voidMasterInit(u8 Copy_MasterAddress)
 {
@@ -39,17 +41,54 @@ void TWI_voidSlaveInit(u8 Copy_SlaveAddress)
 	SET_BIT(TWCR,TWCR_TWEN);
 }
 
-void TWI_voidStartCondition()
+void TWI_voidStartCondition() {
+    // Check if the bus is busy
+    if (GET_BIT(TWCR, TWCR_TWSTA)) {
+        // If busy
+        LCD_WriteCommand(lcd_Clear);
+        LCD_WriteString("Bus is Busy");
+        _delay_ms(1000);
+        return;
+    }
+
+    // Optional: Clear TWINT before setting start condition
+    CLR_BIT(TWCR, TWCR_TWINT); // Make sure TWINT is cleared
+
+    // Start condition
+    SET_BIT(TWCR, TWCR_TWSTA);
+
+    // Clear flag to initiate the start condition
+    SET_BIT(TWCR, TWCR_TWINT);
+
+    // Optional: Wait for a brief moment to stabilize
+    _delay_ms(1); // Small delay
+
+    // Wait until the start condition has been transmitted
+    while (GET_BIT(TWCR, TWCR_TWINT) == 0) {
+        u8 status = TWI_u8GetStatus();
+        LCD_WriteCommand(lcd_Clear);
+        LCD_WriteString("Status: ");
+        char statusStr[4];
+        sprintf(statusStr, "%02X", status);
+        LCD_WriteString(statusStr);
+        _delay_ms(1000); // Slow down the loop to observe
+    }
+
+}
+
+
+void TWI_voidStopCondition()
 {
-	//start condition
-	SET_BIT(TWCR,TWCR_TWSTA);
+	//	SET_BIT(TWCR,TWCR_TWSTO);
 
-	//clear flag
-	SET_BIT(TWCR,TWCR_TWINT);
+	// Send Stop Condition
+	SET_BIT(TWCR, TWCR_TWSTO);
 
-	//wait on the flag
-	while (GET_BIT(TWCR,TWCR_TWINT)==0);
+	// Clear flag
+	SET_BIT(TWCR, TWCR_TWINT);
 
+	// Wait until stop condition execution is complete
+	while (GET_BIT(TWCR, TWCR_TWSTO) == 1);
 }
 
 void TWI_voidSendSlaveAddressWithWrite(u8 Copy_u8SlaveAddress)
@@ -112,8 +151,29 @@ u8 TWI_u8RecieveData()
 	return TWDR;
 }
 
-void TWI_voidStopCondition()
+u8 TWI_u8GetStatus(void)
 {
-	SET_BIT(TWCR,TWCR_TWSTO);
+	// Mask the prescaler bits (lower 3 bits) and return only the status bits (upper 5 bits)
+	return (TWSR & 0xF8);
 }
+/*
+	0x08: Start condition transmitted.
+	0x10: Repeated start condition transmitted.
+	0x18: SLA+W transmitted, ACK received.
+	0x20: SLA+W transmitted, NACK received.
+	0x28: Data byte transmitted, ACK received.
+	0x30: Data byte transmitted, NACK received.
+	0x38: Arbitration lost.
+	0x40: SLA+R transmitted, ACK received.
+	0x48: SLA+R transmitted, NACK received.
+	0x50: Data byte received, ACK returned.
+	0x58: Data byte received, NACK returned.
+	0xF8: Bus error
+	0x00: No relevant information
 
+	u8 status = TWI_u8GetStatus();
+	char statusStr[4];
+	sprintf(statusStr, "%02X", status);
+	LCD_WriteCommand(lcd_Clear);
+	LCD_WriteString(statusStr);
+ */

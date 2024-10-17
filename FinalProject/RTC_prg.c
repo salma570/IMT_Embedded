@@ -19,25 +19,114 @@ void RTC_voidInit(void) //can add option to user to choose mode 12 or 24
 	//enable oscillator
 	//CLR_BIT(Sec_Reg,7);
 	LCD_WriteCommand(lcd_Clear);
-	LCD_WriteString("Will Read in RTC");
+	LCD_WriteString("Read");
 	_delay_ms(1000);
 	u8 oscillator_enable = ((RTC_Read(Sec_Reg))&(0b01111111));
-	LCD_WriteCommand(lcd_Clear);
-	LCD_WriteString("Read Done");
-	_delay_ms(1000);
 
 	LCD_WriteCommand(lcd_Clear);
-	LCD_WriteString("Will Write in RTC");
+	LCD_WriteString("Write");
 	_delay_ms(1000);
 	RTC_Write(Sec_Reg,oscillator_enable);
-	LCD_WriteCommand(lcd_Clear);
-	LCD_WriteString("Write Done");
-	_delay_ms(1000);
 
 	//choose 24-hour mode -> by default: can be changed later by user
 	//CLR_BIT(Hrs_Reg,6);
 	u8 mode_selector_24 = (RTC_Read(Hrs_Reg))&(0b10111111);
 	RTC_Write(Hrs_Reg,mode_selector_24);
+}
+
+void RTC_Write(u8 Copy_u16RegAddress, u8 Copy_u8Data) //MCU writes on RTC
+{
+	//prep slave address
+	u8 SlaveAddress = 0b01101000;
+
+	u8 status = TWI_u8GetStatus();
+	char statusStr[4];
+	sprintf(statusStr, "%02X", status);
+	LCD_WriteCommand(lcd_Clear);
+	LCD_WriteString(statusStr);
+	_delay_ms(1000);
+	LCD_WriteCommand(lcd_Clear);
+	LCD_WriteString("Entering TWI Start");
+	_delay_ms(500);
+	//start
+	TWI_voidStartCondition();
+	status = TWI_u8GetStatus();
+	sprintf(statusStr, "%02X", status);
+	LCD_WriteCommand(lcd_Clear);
+	LCD_WriteString(statusStr);
+	_delay_ms(1000);
+
+	LCD_WriteCommand(lcd_Clear);
+	LCD_WriteString("Send Slave Write");
+	_delay_ms(500);
+	//send slave address with write
+	TWI_voidSendSlaveAddressWithWrite(SlaveAddress);
+
+	LCD_WriteCommand(lcd_Clear);
+	LCD_WriteString("Send Data 1");
+	_delay_ms(500);
+	//send register number
+	TWI_voidSendData((u8)Copy_u16RegAddress);
+
+	LCD_WriteCommand(lcd_Clear);
+	LCD_WriteString("Send Data 2");
+	_delay_ms(500);
+	//send data
+	TWI_voidSendData((u8)Copy_u8Data);
+
+	//stop
+	LCD_WriteCommand(lcd_Clear);
+	LCD_WriteString("Stop");
+	_delay_ms(500);
+	TWI_voidStopCondition();
+
+	//delay
+	_delay_ms(10);
+}
+
+u8   RTC_Read(u8 Copy_u16RegAddress) //MCU reads from RTC
+{
+	//prep slave address
+	u8 SlaveAddress = 0b01101000;
+
+	//start
+	u8 status = TWI_u8GetStatus();
+	char statusStr[4];
+	sprintf(statusStr, "%02X", status);
+	LCD_WriteCommand(lcd_Clear);
+	LCD_WriteString(statusStr);
+	_delay_ms(1000);
+	TWI_voidStartCondition();
+	//status 08 -> start cond transmitted
+
+	//send slave address with write
+	TWI_voidSendSlaveAddressWithWrite(SlaveAddress);
+	//status 08 -> SLA+W transmitted, ACK received.
+
+	//send register number
+	TWI_voidSendData((u8)Copy_u16RegAddress);
+	//0x28: Data byte transmitted, ACK received.
+
+	//delay
+	//	_delay_us(10); //lw bazet emsa7o da
+
+	//repeated start
+	TWI_voidStartCondition();
+	//0x10: Repeated start condition transmitted.
+
+	//send slave address with read
+	TWI_voidSendSLaveAddressWithRead(SlaveAddress);
+	//0x40: SLA+R transmitted, ACK received.
+
+	//read data
+	u8 Data = 0;
+	Data = TWI_u8RecieveData();
+	//0x50: Data byte received, ACK returned.
+
+	//stop
+	TWI_voidStopCondition();
+	//0x50: Data byte received, ACK returned.
+	return Data;
 }
 
 void RTC_voidSetSec(RTC_val* rtc)
@@ -143,7 +232,7 @@ u8 RTC_voidGetWeekDay(void)
 	u8 day = BCD_to_DEC(reg_val && 0b00000111);
 	return day;
 }
-
+//converters
 u8 DEC_to_BCD(u8 val)
 {
 	return (val + 6*(val/10));
@@ -153,97 +242,3 @@ u8 BCD_to_DEC(u8 val)
 	return (val - 6*(val>>4));
 }
 
-
-void RTC_Write(u8 Copy_u16RegAddress, u8 Copy_u8Data) //MCU writes on RTC
-{
-	//prep slave address
-	u8 SlaveAddress = 0b01101000;
-
-	LCD_WriteCommand(lcd_Clear);
-	LCD_WriteString("Entering TWI Start");
-	_delay_ms(500);
-	//start
-	TWI_voidStartCondition();
-
-	LCD_WriteCommand(lcd_Clear);
-	LCD_WriteString("Send Slave Write");
-	_delay_ms(500);
-	//send slave address with write
-	TWI_voidSendSlaveAddressWithWrite(SlaveAddress);
-
-	LCD_WriteCommand(lcd_Clear);
-	LCD_WriteString("Send Data 1");
-	_delay_ms(500);
-	//send register number
-	TWI_voidSendData((u8)Copy_u16RegAddress);
-
-	LCD_WriteCommand(lcd_Clear);
-	LCD_WriteString("Send Data 2");
-	_delay_ms(500);
-	//send data
-	TWI_voidSendData((u8)Copy_u8Data);
-
-	//stop
-	LCD_WriteCommand(lcd_Clear);
-	LCD_WriteString("Stop");
-	_delay_ms(500);
-	TWI_voidStopCondition();
-
-	//delay
-	_delay_ms(10);
-}
-
-u8   RTC_Read(u8 Copy_u16RegAddress) //MCU reads from RTC
-{
-	//prep slave address
-	u8 SlaveAddress = 0b01101000;
-
-	LCD_WriteCommand(lcd_Clear);
-	LCD_WriteString("Entering TWI Start");
-	_delay_ms(500);
-	//start
-	TWI_voidStartCondition();
-
-
-	LCD_WriteCommand(lcd_Clear);
-	LCD_WriteString("Send Slave with write");
-	_delay_ms(500);
-	//send slave address with write
-	TWI_voidSendSlaveAddressWithWrite(SlaveAddress);
-
-	LCD_WriteCommand(lcd_Clear);
-	LCD_WriteString("Send Data");
-	_delay_ms(500);
-	//send register number
-	TWI_voidSendData((u8)Copy_u16RegAddress);
-
-	//delay
-	_delay_us(10); //lw bazet emsa7o da
-
-	LCD_WriteCommand(lcd_Clear);
-	LCD_WriteString("repeated start");
-	_delay_ms(500);
-	//repeated start
-	TWI_voidStartCondition();
-
-	LCD_WriteCommand(lcd_Clear);
-	LCD_WriteString("Send Slave with Read");
-	_delay_ms(500);
-	//send slave address with read
-	TWI_voidSendSLaveAddressWithRead(SlaveAddress);
-
-	//read data
-	u8 Data = 0;
-	LCD_WriteCommand(lcd_Clear);
-	LCD_WriteString("Receive");
-	_delay_ms(500);
-	Data = TWI_u8RecieveData();
-
-	LCD_WriteCommand(lcd_Clear);
-	LCD_WriteString("Stop");
-	_delay_ms(500);
-	//stop
-	TWI_voidStopCondition();
-
-	return Data;
-}

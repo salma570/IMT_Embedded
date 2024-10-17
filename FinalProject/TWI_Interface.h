@@ -17,4 +17,6 @@ u8 TWI_u8RecieveData();
 
 void TWI_voidStopCondition();
 
+u8 TWI_u8GetStatus(void);
+
 #endif /* TWI_INTERFACE_H_ */

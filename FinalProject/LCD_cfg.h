@@ -11,7 +11,7 @@
 #define LCD_DataPort PORTA /* Select PORTA or PORTB or PORTC or PORTD */
 #define LCD_CtrlPort PORTB /* Select PORTA or PORTB or PORTC or PORTD */
 
-#define RS_Pin PIN_2 /* Select a pin from PIN_0 to PIN_7 */
+#define RS_Pin PIN_3 /* Select a pin from PIN_0 to PIN_7 */
 #define RW_Pin PIN_1 /* Select a pin from PIN_0 to PIN_7 */
 #define E_Pin  PIN_0 /* Select a pin from PIN_0 to PIN_7 */
 

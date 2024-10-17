@@ -12,7 +12,7 @@
 
 #define EXTI1_mode FallingEdge
 
-#define EXTI2_mode RisingEdge
+#define EXTI2_mode FallingEdge
 
 
 
