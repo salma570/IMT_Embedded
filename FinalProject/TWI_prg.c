@@ -14,8 +14,8 @@
 
 void TWI_voidMasterInit(u8 Copy_MasterAddress)
 {
-	//100kHz clk speed
-	TWBR=32;
+	//80kHz clk speed
+	TWBR=42;
 	CLR_BIT(TWSR,TWSR_TWPS0);
 	CLR_BIT(TWSR,TWSR_TWPS1);
 
@@ -77,15 +77,7 @@ void TWI_voidStartCondition() {
     _delay_ms(1); // Small delay
 
     // Wait until the start condition has been transmitted
-    while (GET_BIT(TWCR, TWCR_TWINT) == 0) {
-        u8 status = TWI_u8GetStatus();
-        LCD_WriteCommand(lcd_Clear);
-        LCD_WriteString("Status: ");
-        char statusStr[4];
-        sprintf(statusStr, "%02X", status);
-        LCD_WriteString(statusStr);
-        _delay_ms(1000); // Slow down the loop to observe
-    }
+    while (GET_BIT(TWCR, TWCR_TWINT) == 0);
 
 }
 
@@ -119,7 +111,16 @@ void TWI_voidSendSlaveAddressWithWrite(u8 Copy_u8SlaveAddress)
 	SET_BIT(TWCR,TWCR_TWINT);
 
 	//wait on the flag
-	while (GET_BIT(TWCR,TWCR_TWINT)==0);
+	while (GET_BIT(TWCR,TWCR_TWINT)==0)
+	{
+//        u8 status = TWI_u8GetStatus();
+//        LCD_WriteCommand(lcd_Clear);
+//        LCD_WriteString("Status in: ");
+//        char statusStr[4];
+//        sprintf(statusStr, "%02X", status);
+//        LCD_WriteString(statusStr);
+//        _delay_ms(1000); // Slow down the loop to observe
+	}
 }
 
 void TWI_voidSendSLaveAddressWithRead(u8 Copy_u8SlaveAddress)

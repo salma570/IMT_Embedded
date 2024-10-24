@@ -149,6 +149,5 @@ void Alarm_voidTempDisplay(void)
 	LCD_GoTo(line_2,12);
 	LCD_WriteChar(u8tempmin_1+48);
 	LCD_WriteChar(u8tempmin_2+48);
-	LCD_WriteChar(':');
 	return;
 }

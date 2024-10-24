@@ -7,233 +7,119 @@
 
 #include "STD_Types.h"
 #include "BIT_MATH.h"
-#include "LCD_int.h"
-#include "RTC_prv.h"
 #include "RTC_int.h"
 #include "TWI_Interface.h"
 #include "util/delay.h"
 
-//7otto el validations barra
-void RTC_voidInit(void) //can add option to user to choose mode 12 or 24
-{
-	//enable oscillator
-	//CLR_BIT(Sec_Reg,7);
-	u8 oscillator_enable = ((RTC_Read(Sec_Reg))&(0b01111111));
-
-	LCD_WriteCommand(lcd_Clear);
-	LCD_WriteString("Write");
-	_delay_ms(1000);
-	RTC_Write(Sec_Reg,oscillator_enable);
-
-	//choose 24-hour mode -> by default: can be changed later by user
-	//CLR_BIT(Hrs_Reg,6);
-	u8 mode_selector_24 = (RTC_Read(Hrs_Reg))&(0b10111111);
-	TWI_Reset();
-	LCD_WriteCommand(lcd_Clear);
-	LCD_WriteString("Write2");
-	_delay_ms(1000);
-	RTC_Write(Hrs_Reg,mode_selector_24);
+// I2C Initialization
+void I2C_Init(void) {
+    // Set SCL frequency
+    TWSR = 0x00; // Prescaler set to 1
+    TWBR = ((F_CPU/SCL_CLOCK)-16)/2; // Set bit rate register
 }
 
-void RTC_Write(u8 Copy_u16RegAddress, u8 Copy_u8Data) //MCU writes on RTC
-{
-	//prep slave address
-	u8 SlaveAddress = 0b01101000;
-
-	u8 status = TWI_u8GetStatus();
-	char statusStr[4];
-	sprintf(statusStr, "%02X", status);
-	LCD_WriteCommand(lcd_Clear);
-	LCD_WriteString(statusStr);
-	_delay_ms(1000);
-	LCD_WriteCommand(lcd_Clear);
-	LCD_WriteString("Entering TWI Start");
-	_delay_ms(500);
-	//start
-	TWI_voidStartCondition();
-	status = TWI_u8GetStatus();
-	sprintf(statusStr, "%02X", status);
-	LCD_WriteCommand(lcd_Clear);
-	LCD_WriteString(statusStr);
-	_delay_ms(1000);
-
-	LCD_WriteCommand(lcd_Clear);
-	LCD_WriteString("Send Slave Write");
-	_delay_ms(500);
-	//send slave address with write
-	TWI_voidSendSlaveAddressWithWrite(SlaveAddress);
-
-	LCD_WriteCommand(lcd_Clear);
-	LCD_WriteString("Send Data 1");
-	_delay_ms(500);
-	//send register number
-	TWI_voidSendData((u8)Copy_u16RegAddress);
-
-	LCD_WriteCommand(lcd_Clear);
-	LCD_WriteString("Send Data 2");
-	_delay_ms(500);
-	//send data
-	TWI_voidSendData((u8)Copy_u8Data);
-
-	//stop
-	LCD_WriteCommand(lcd_Clear);
-	LCD_WriteString("Stop");
-	_delay_ms(500);
-	TWI_voidStopCondition();
-
-	//delay
-	_delay_ms(10);
+// Start I2C communication
+void I2C_Start(void) {
+    TWCR = (1 << TWCR_TWSTA) | (1 << TWCR_TWEN) | (1 << TWCR_TWINT); // Send START condition
+    while (!(TWCR & (1 << TWCR_TWINT))); // Wait for START condition to be transmitted
 }
 
-u8   RTC_Read(u8 Copy_u16RegAddress) //MCU reads from RTC
-{
-	//prep slave address
-	u8 SlaveAddress = 0b01101000;
-
-	//start
-	TWI_voidStartCondition();
-	//status 08 -> start cond transmitted
-
-	//send slave address with write
-	TWI_voidSendSlaveAddressWithWrite(SlaveAddress);
-	//status 08 -> SLA+W transmitted, ACK received.
-
-	//send register number
-	TWI_voidSendData((u8)Copy_u16RegAddress);
-	//0x28: Data byte transmitted, ACK received.
-
-	//delay
-	_delay_us(10); //lw bazet emsa7o da
-
-	//repeated start
-	TWI_voidStartCondition();
-	//0x10: Repeated start condition transmitted.
-
-	//send slave address with read
-	TWI_voidSendSLaveAddressWithRead(SlaveAddress);
-	//0x40: SLA+R transmitted, ACK received.
-
-	//read data
-	u8 Data = 0;
-	Data = TWI_u8RecieveData();
-	//0x50: Data byte received, ACK returned.
-
-	//stop
-	TWI_voidStopCondition();
-	//0x50: Data byte received, ACK returned.
-	return Data;
+// Stop I2C communication
+void I2C_Stop(void) {
+    TWCR = (1 << TWCR_TWSTO) | (1 << TWCR_TWEN) | (1 << TWCR_TWINT); // Send STOP condition
 }
 
-void RTC_voidSetSec(RTC_val* rtc)
-{
-	if(rtc->u8Seconds>=0 && rtc->u8Seconds<=59)
-		RTC_Write(Sec_Reg,rtc->u8Seconds);
+// Write data to I2C bus
+void I2C_Write(u8 data) {
+    TWDR = data; // Load data into data register
+    TWCR = (1 << TWCR_TWEN) | (1 << TWCR_TWINT); // Clear TWINT to start transmission
+    while (!(TWCR & (1 << TWCR_TWINT))); // Wait for data to be transmitted
 }
-void RTC_voidSetMin(RTC_val* rtc)
-{
-	if(rtc->u8Minutes>=0 && rtc->u8Minutes<=59)
-		RTC_Write(Min_Reg,rtc->u8Minutes);
+
+// Read data from I2C bus with ACK
+u8 I2C_ReadAck(void) {
+    TWCR = (1 << TWCR_TWEN) | (1 << TWCR_TWINT) | (1 << TWCR_TWEA); // Enable TWI and ACK
+    while (!(TWCR & (1 << TWCR_TWINT))); // Wait for data reception
+    return TWDR; // Return received data
 }
-void RTC_voidSetHour(RTC_val* rtc)
-{
-	if(rtc->u8Hours>=0 && rtc->u8Hours<=24)
-		RTC_Write(Hrs_Reg,rtc->u8Hours);
+
+// Read data from I2C bus with NACK
+u8 I2C_ReadNack(void) {
+    TWCR = (1 << TWCR_TWEN) | (1 << TWCR_TWINT); // Enable TWI without ACK
+    while (!(TWCR & (1 << TWCR_TWINT))); // Wait for data reception
+    return TWDR; // Return received data
 }
-void RTC_voidSetYr(RTC_val* rtc)
-{
-	if(rtc->u8Years>=0 && rtc->u8Years<=24)
-		RTC_Write(Year_Reg,rtc->u8Years);
+
+// Convert BCD to decimal
+u8 BCD_to_Dec(u8 bcd) {
+    return ((bcd / 16 * 10) + (bcd % 16));
 }
-void RTC_voidSetMonth(RTC_val* rtc)
-{
-	if(rtc->u8Months>=1 && rtc->u8Months<=12)
-		RTC_Write(Month_Reg,rtc->u8Months);
+
+// Convert decimal to BCD
+u8 Dec_to_BCD(u8 dec) {
+    return ((dec / 10 * 16) + (dec % 10));
 }
-void RTC_voidSetDay(RTC_val* rtc)
-{
-	if ((rtc->u8Months == 1 || rtc->u8Months == 3 || rtc->u8Months == 5 || rtc->u8Months == 7 || rtc->u8Months == 8 || rtc->u8Months == 10 || rtc->u8Months == 12) && (rtc->u8Days >= 1 && rtc->u8Days <= 31))
-	{
-		RTC_Write(Day_Reg,rtc->u8Days);
-	}
-	else if ((rtc->u8Months == 4 || rtc->u8Months == 6 || rtc->u8Months == 9 || rtc->u8Months == 11) && (rtc->u8Days >= 1 && rtc->u8Days <= 30))
-	{
-		RTC_Write(Day_Reg,rtc->u8Days);
-	}
-	else if (rtc->u8Months == 2)
-	{
-		if (rtc->u8Years % 4 == 0)
-		{
-			if (rtc->u8Days >= 1 && rtc->u8Days <= 29)
-				RTC_Write(Day_Reg,rtc->u8Days);
-		}
-		else
-		{
-			if (rtc->u8Days >= 1 && rtc->u8Days <= 28)
-				RTC_Write(Day_Reg,rtc->u8Days);
-		}
-	}
+
+// Set time in DS1307 RTC
+void RTC_SetTime(u8 sec, u8 min, u8 hour) {
+    sec = Dec_to_BCD(sec);
+    min = Dec_to_BCD(min);
+    hour = Dec_to_BCD(hour);
+
+    I2C_Start();
+    I2C_Write(DS1307_ADDRESS << 1); // Address the DS1307 in write mode
+    I2C_Write(0x00); // Set pointer to seconds register
+    I2C_Write(sec);  // Write seconds
+    I2C_Write(min);  // Write minutes
+    I2C_Write(hour); // Write hours
+    I2C_Stop();
 }
-void RTC_voidSetWeekDay(RTC_val* rtc)
-{
-	if(rtc->u8DayOfWeek>=1 && rtc->u8DayOfWeek<=7)
-		RTC_Write(WeekDay_Reg,rtc->u8DayOfWeek);
+
+// Get time from DS1307 RTC
+void RTC_GetTime(u8 *sec, u8 *min, u8 *hour) {
+    I2C_Start();
+    I2C_Write(DS1307_ADDRESS << 1); // Address DS1307 in write mode
+    I2C_Write(0x00); // Set pointer to seconds register
+    I2C_Stop();
+
+    I2C_Start();
+    I2C_Write((DS1307_ADDRESS << 1) | 1); // Address DS1307 in read mode
+    *sec = BCD_to_Dec(I2C_ReadAck()); // Read seconds
+    *min = BCD_to_Dec(I2C_ReadAck()); // Read minutes
+    *hour = BCD_to_Dec(I2C_ReadNack()); // Read hours
+    I2C_Stop();
 }
-//getters
-u8 RTC_voidGetSec(void)
-{
-	u8 reg_val = RTC_Read(Sec_Reg);
-	u8 tens = BCD_to_DEC(reg_val && 0b01110000);
-	u8 units = BCD_to_DEC(reg_val && 0b00001111);
-	return ((tens*10) + units);
+
+// Set the day, date, month, and year in DS1307
+void RTC_SetDate(u8 day, u8 date, u8 month, u8 year) {
+    day = Dec_to_BCD(day);
+    date = Dec_to_BCD(date);
+    month = Dec_to_BCD(month);
+    year = Dec_to_BCD(year);
+
+    I2C_Start();
+    I2C_Write(DS1307_ADDRESS << 1); // Address the DS1307 in write mode
+    I2C_Write(0x03); // Set pointer to day register
+    I2C_Write(day);  // Write day of the week
+    I2C_Write(date); // Write date
+    I2C_Write(month); // Write month
+    I2C_Write(year); // Write year
+    I2C_Stop();
 }
-u8 RTC_voidGetMin(void)
-{
-	u8 reg_val = RTC_Read(Min_Reg);
-	u8 tens = BCD_to_DEC(reg_val && 0b01110000);
-	u8 units = BCD_to_DEC(reg_val && 0b00001111);
-	return ((tens*10) + units);
-}
-u8 RTC_voidGetHour(void)
-{
-	u8 reg_val = RTC_Read(Hrs_Reg);
-	u8 tens = BCD_to_DEC(reg_val && 0b00010000);
-	u8 units = BCD_to_DEC(reg_val && 0b00001111);
-	return ((tens*10) + units);
-}
-u8 RTC_voidGetYr(void)
-{
-	u8 reg_val = RTC_Read(Year_Reg);
-	u8 tens = BCD_to_DEC(reg_val && 0b11110000);
-	u8 units = BCD_to_DEC(reg_val && 0b00001111);
-	return ((tens*10) + units);
-}
-u8 RTC_voidGetMonth(void)
-{
-	u8 reg_val = RTC_Read(Month_Reg);
-	u8 tens = BCD_to_DEC(reg_val && 0b00010000);
-	u8 units = BCD_to_DEC(reg_val && 0b00001111);
-	return ((tens*10) + units);
-}
-u8 RTC_voidGetDay(void)
-{
-	u8 reg_val = RTC_Read(Day_Reg);
-	u8 tens = BCD_to_DEC(reg_val && 0b00110000);
-	u8 units = BCD_to_DEC(reg_val && 0b00001111);
-	return ((tens*10) + units);
-}
-u8 RTC_voidGetWeekDay(void)
-{
-	u8 reg_val = RTC_Read(WeekDay_Reg);
-	u8 day = BCD_to_DEC(reg_val && 0b00000111);
-	return day;
-}
-//converters
-u8 DEC_to_BCD(u8 val)
-{
-	return (val + 6*(val/10));
-}
-u8 BCD_to_DEC(u8 val)
-{
-	return (val - 6*(val>>4));
+
+// Get the day, date, month, and year from DS1307
+void RTC_GetDate(u8 *day, u8 *date, u8 *month, u8 *year) {
+    I2C_Start();
+    I2C_Write(DS1307_ADDRESS << 1); // Address DS1307 in write mode
+    I2C_Write(0x03); // Set pointer to day register
+    I2C_Stop();
+
+    I2C_Start();
+    I2C_Write((DS1307_ADDRESS << 1) | 1); // Address DS1307 in read mode
+    *day = BCD_to_Dec(I2C_ReadAck());   // Read day of the week
+    *date = BCD_to_Dec(I2C_ReadAck());  // Read date
+    *month = BCD_to_Dec(I2C_ReadAck()); // Read month
+    *year = BCD_to_Dec(I2C_ReadNack()); // Read year
+    I2C_Stop();
 }
 

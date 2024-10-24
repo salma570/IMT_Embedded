@@ -47,13 +47,9 @@ void main(void)
 {
 	//inits
 	LCD_init();
-	KPD_init();
-	TWI_voidMasterInit(1);
-	LCD_WriteString("Init RTC");
-	_delay_ms(1000);
-	RTC_voidInit();
-	EXTI_SetTriggerMode();
-	GIE_Enable();
+	I2C_Init();
+
+	RTC_SetTime(0, 0, 8); // Set time to 08:00:00
 
 	//but1: used for increments
 	DIO_SetPinDirection(3,PIN_2,Input);
@@ -64,19 +60,23 @@ void main(void)
 	//but3: end program
 	DIO_SetPinDirection(1,PIN_2,Input);
 	DIO_SetPinValue(1,PIN_2,HIGH); //pull up
-	EXTI2_CallBackFunc(end_prg_exti);
-	EXTI_Enable(EXTI2);
 
 	//print welcome messages and start program
 	LCD_WriteCommand(lcd_Clear);
 	_delay_ms(1000);
-	LCD_WriteString("Welcome To Program");
+	LCD_WriteString("Welcome To");
+	LCD_GoTo(line_2,0);
+	LCD_WriteString("Program");
 	_delay_ms(1000);
 	LCD_WriteCommand(lcd_Clear);
-	LCD_WriteString("Adjust Date & Time");
+	LCD_WriteString("Adjust Date");
+	LCD_GoTo(line_2,0);
+	LCD_WriteString("and Time");
 	_delay_ms(1000);
 	LCD_WriteCommand(lcd_Clear);
-	///WRITE RTC ADJUST LOGIC HERE
+	///////////////////////////////////
+	////WRITE RTC ADJUST LOGIC HERE////
+	///////////////////////////////////
 	LCD_WriteString("Choose Mode: ");
 	_delay_ms(1000);
 	LCD_WriteCommand(lcd_Clear);
@@ -90,7 +90,11 @@ void main(void)
 	LCD_WriteString("Choice: ");
 
 	EXTI0_CallBackFunc(increment_mode_exti); //increment
+	EXTI2_CallBackFunc(end_prg_exti);
 	EXTI_Enable(EXTI0);
+	EXTI_Enable(EXTI2);
+	EXTI_SetTriggerMode();
+	GIE_Enable();
 	static u8 pressed_ok = 1;
 	mode = 1;
 	while(pressed_ok==1)
@@ -101,18 +105,60 @@ void main(void)
 		_delay_ms(50);
 	}
 	EXTI_Disable(EXTI0);
+	GIE_Disable();
+	_delay_ms(1500);
 
-	//	//current node
-	//	RTC_val * current;
-	//	mode=4;
 	switch (mode)
 	{
 	case TimeClock:
+	{
+		GIE_Enable();
+		LCD_WriteCommand(lcd_Clear);
+		u8 hour, min, sec;
+		u8 day, date, month, year;
+		char buffer[10];  // Buffer to store the converted time/date strings
 
+		while (1) {
+			RTC_GetTime(&sec, &min, &hour);
+			RTC_GetDate(&day, &date, &month, &year);
+
+			// Display time
+			sprintf(buffer, "%02d", hour);
+			LCD_WriteString(buffer);
+			LCD_WriteChar(':');
+
+			sprintf(buffer, "%02d", min);
+			LCD_WriteString(buffer);
+			LCD_WriteChar(':');
+
+			sprintf(buffer, "%02d", sec);
+			LCD_WriteString(buffer);
+			LCD_WriteChar(' ');
+
+			// Display date (DD-MM-YY)
+			sprintf(buffer, "%02d", date);
+			LCD_WriteString(buffer);
+			LCD_WriteChar('-');
+
+			sprintf(buffer, "%02d", month);
+			LCD_WriteString(buffer);
+			LCD_WriteChar('-');
+
+			sprintf(buffer, "%02d", year);
+			LCD_WriteString(buffer);
+
+			_delay_ms(500);
+			LCD_WriteCommand(lcd_Clear);  // Clear the LCD for the next update
+		}
 		break;
+	}
 	case Alarm:
+	{
+		u8 hourAlarm, minAlarm, secAlarm;
 		LCD_WriteCommand(lcd_Clear);
 		//prompt user to enter value to Set Alarm
+		LCD_WriteString("Set Alarm");
+		_delay_ms(1000);
 		//using 2 buttons
 		//but1: increments and rolls back
 		DIO_SetPinDirection(3,PIN_2,Input); //push button on INT0
@@ -125,22 +171,26 @@ void main(void)
 		//enable interrupts
 		EXTI_Enable(EXTI0);
 		EXTI_Enable(EXTI1);
+		GIE_Enable();
 		Alarm_InitTemp();
-		while(Alarm_u8GetCurrentButtonCount()<=4) //no action until user fully enters his data
+		while(Alarm_u8GetCurrentButtonCount() <= 4) //no action until user fully enters his data
 		{
 			Alarm_voidTempDisplay();
 		}
 		Alarm_AdjustTime();
 		while(1)
 		{
-			if(RTC_voidGetHour()==Alarm_GetHr() && RTC_voidGetMin()==Alarm_GetMin())
+			RTC_GetTime(&secAlarm, &minAlarm, &hourAlarm);
+			if(hourAlarm == Alarm_GetHr() && minAlarm == Alarm_GetMin())
 			{
 				DIO_SetPinDirection(1,4,Output);
 				DIO_SetPinValue(1,4,HIGH);
 			}
 		}
 		break;
+	}
 	case StopWatch:
+	{
 		//pause and resume stop watch
 		LCD_WriteCommand(lcd_Clear);
 		DIO_SetPinDirection(3,PIN_2,Input); //push button on INT0
@@ -149,14 +199,15 @@ void main(void)
 		EXTI0_CallBackFunc(StopWatch_EXTI);
 		EXTI_Enable(EXTI0);
 		GIE_Enable();
-		xTaskCreate(StopWatch_Task,NULL,configMINIMAL_STACK_SIZE,NULL,0,&StopWatchHandle);
+		xTaskCreate(StopWatch_Task, NULL, configMINIMAL_STACK_SIZE, NULL, 0, &StopWatchHandle);
 		vTaskStartScheduler();
 		break;
+	}
 	case CountDown:
+	{
 		LCD_WriteCommand(lcd_Clear);
 		//prompt user to enter value to countdown from
 		//using 2 buttons
-		//but1: increments and rolls back
 		DIO_SetPinDirection(3,PIN_2,Input); //push button on INT0
 		DIO_SetPinValue(3,PIN_2,HIGH); //pull up
 		EXTI0_CallBackFunc(CD_IncrementTemp_EXTI); //increment
@@ -171,16 +222,16 @@ void main(void)
 		GIE_Enable();
 		//validation happens, if validation fails -> reset
 		init_alltemp();
-		while(GetCurrentButton_count()<=6) //no action until user fully enters his data
+		while(GetCurrentButton_count() <= 6) //no action until user fully enters his data
 		{
 			CountDown_voidTempDisplay();
 		}
 		CountDownu8_SetCurrent_Values();
 		//now the last okay is pressed and task should start
-		xTaskCreate(Countdown_Task,NULL,configMINIMAL_STACK_SIZE,NULL,0,NULL);
+		xTaskCreate(Countdown_Task, NULL, configMINIMAL_STACK_SIZE, NULL, 0, NULL);
 		vTaskStartScheduler();
-		//interrupt for going to input (reset button)
 		break;
+	}
 	default:
 		break;
 	}
@@ -190,6 +241,7 @@ void main(void)
 
 	}
 }
+
 void end_prg_exti(void)
 {
 	DIO_SetPinValue(1,4,LOW);
@@ -258,3 +310,6 @@ void Alarm_IncrementOK_EXTI(void)
 {
 	Alarm_voidIncrementOK();
 }
+
+
+
