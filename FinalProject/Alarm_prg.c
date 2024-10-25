@@ -83,18 +83,22 @@ void Alarm_u8IncrementCurrentTemp(void)
 	}
 	else if(count_button_pressed ==1) //HrsUnits
 	{
-		if (*ALLtemp[count_button_pressed] >= 4) //maybe remove =
+		if (*ALLtemp[count_button_pressed] >= 4 && *ALLtemp[0] == 2)
 		{
 			*ALLtemp[count_button_pressed] = 0;
 		}
-		else
+		else if (*ALLtemp[count_button_pressed] >= 9)
 		{ // Otherwise increment it
+			*ALLtemp[count_button_pressed] = 0;
+		}
+		else
+		{
 			(*ALLtemp[count_button_pressed])++;
 		}
 	}
 	else if (count_button_pressed == 2) //MinTens
 	{
-		if (*ALLtemp[count_button_pressed] >= 5) //maybe remove =
+		if (*ALLtemp[count_button_pressed] >= 5)
 		{
 			*ALLtemp[count_button_pressed] = 0;
 		}
@@ -105,7 +109,7 @@ void Alarm_u8IncrementCurrentTemp(void)
 	}
 	else if (count_button_pressed == 3) //MinUnits
 	{
-		if (*ALLtemp[count_button_pressed] >= 9) //maybe remove =
+		if (*ALLtemp[count_button_pressed] >= 9)
 		{
 			*ALLtemp[count_button_pressed] = 0;
 		}

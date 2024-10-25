@@ -49,7 +49,8 @@ void main(void)
 	LCD_init();
 	I2C_Init();
 
-	RTC_SetTime(0, 0, 8); // Set time to 08:00:00
+	RTC_SetTime(00, 00, 6); // Set time to 06:00:00
+	//RTC_SetDate(6,29,2,24);
 
 	//but1: used for increments
 	DIO_SetPinDirection(3,PIN_2,Input);
@@ -106,7 +107,7 @@ void main(void)
 	}
 	EXTI_Disable(EXTI0);
 	GIE_Disable();
-	_delay_ms(1500);
+	_delay_ms(100);
 
 	switch (mode)
 	{
@@ -116,7 +117,7 @@ void main(void)
 		LCD_WriteCommand(lcd_Clear);
 		u8 hour, min, sec;
 		u8 day, date, month, year;
-		char buffer[10];  // Buffer to store the converted time/date strings
+		char buffer[10];
 
 		while (1) {
 			RTC_GetTime(&sec, &min, &hour);
@@ -161,11 +162,9 @@ void main(void)
 		_delay_ms(1000);
 		//using 2 buttons
 		//but1: increments and rolls back
-		DIO_SetPinDirection(3,PIN_2,Input); //push button on INT0
 		DIO_SetPinValue(3,PIN_2,HIGH); //pull up
 		EXTI0_CallBackFunc(Alarm_IncrementTemp_EXTI); //increment
 		//but2: to submit
-		DIO_SetPinDirection(3,PIN_3,Input); //push button on INT1
 		DIO_SetPinValue(3,PIN_3,HIGH); //pull up
 		EXTI1_CallBackFunc(Alarm_IncrementOK_EXTI); //okays
 		//enable interrupts
@@ -173,19 +172,35 @@ void main(void)
 		EXTI_Enable(EXTI1);
 		GIE_Enable();
 		Alarm_InitTemp();
-		while(Alarm_u8GetCurrentButtonCount() <= 4) //no action until user fully enters his data
+		while(Alarm_u8GetCurrentButtonCount() < 4) //no action until user fully enters his data
 		{
 			Alarm_voidTempDisplay();
 		}
 		Alarm_AdjustTime();
+		DIO_SetPinDirection(1,4,Output);
+		char AlarmBuffer[10];
 		while(1)
 		{
+			LCD_WriteCommand(lcd_Clear);
 			RTC_GetTime(&secAlarm, &minAlarm, &hourAlarm);
+			sprintf(AlarmBuffer, "%02d", hourAlarm);
+			LCD_WriteString(AlarmBuffer);
+			LCD_WriteChar(':');
+
+			sprintf(AlarmBuffer, "%02d", minAlarm);
+			LCD_WriteString(AlarmBuffer);
+			LCD_WriteChar(':');
+
+			sprintf(AlarmBuffer, "%02d", secAlarm);
+			LCD_WriteString(AlarmBuffer);
+			LCD_WriteChar(' ');
+
 			if(hourAlarm == Alarm_GetHr() && minAlarm == Alarm_GetMin())
 			{
-				DIO_SetPinDirection(1,4,Output);
 				DIO_SetPinValue(1,4,HIGH);
 			}
+			Alarm_DisplaySet();
+			_delay_ms(500);
 		}
 		break;
 	}
@@ -193,7 +208,6 @@ void main(void)
 	{
 		//pause and resume stop watch
 		LCD_WriteCommand(lcd_Clear);
-		DIO_SetPinDirection(3,PIN_2,Input); //push button on INT0
 		DIO_SetPinValue(3,PIN_2,HIGH); //pull up
 		EXTI_SetTriggerMode();
 		EXTI0_CallBackFunc(StopWatch_EXTI);
@@ -208,11 +222,9 @@ void main(void)
 		LCD_WriteCommand(lcd_Clear);
 		//prompt user to enter value to countdown from
 		//using 2 buttons
-		DIO_SetPinDirection(3,PIN_2,Input); //push button on INT0
 		DIO_SetPinValue(3,PIN_2,HIGH); //pull up
 		EXTI0_CallBackFunc(CD_IncrementTemp_EXTI); //increment
 		//but2: to submit
-		DIO_SetPinDirection(3,PIN_3,Input); //push button on INT1
 		DIO_SetPinValue(3,PIN_3,HIGH); //pull up
 		EXTI1_CallBackFunc(CD_IncrementOK_EXTI); //okays
 		//enable interrupts
@@ -222,7 +234,7 @@ void main(void)
 		GIE_Enable();
 		//validation happens, if validation fails -> reset
 		init_alltemp();
-		while(GetCurrentButton_count() <= 6) //no action until user fully enters his data
+		while(GetCurrentButton_count() < 6) //no action until user fully enters his data
 		{
 			CountDown_voidTempDisplay();
 		}
