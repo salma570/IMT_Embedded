@@ -10,9 +10,7 @@
 #include "DIO_int.h"
 #include "LCD_int.h"
 #include "GIE_int.h"
-#include "TWI_Interface.h"
 #include "EXTI_int.h"
-#include "KPD_int.h"
 #include "RTC_int.h"
 #include "stopwatch_int.h"
 #include "Alarm_int.h"
@@ -40,6 +38,9 @@ void Alarm_IncrementTemp_EXTI(void);
 void Alarm_IncrementOK_EXTI(void);
 void increment_mode_exti(void);
 void end_prg_exti(void);
+void rtc_inc_exti(void);
+void rtc_ok_Exti(void);
+
 xTaskHandle StopWatchHandle=NULL;
 static u8 mode;
 
@@ -48,9 +49,6 @@ void main(void)
 	//inits
 	LCD_init();
 	I2C_Init();
-
-	RTC_SetTime(00, 00, 6); // Set time to 06:00:00
-	//RTC_SetDate(6,29,2,24);
 
 	//but1: used for increments
 	DIO_SetPinDirection(3,PIN_2,Input);
@@ -65,9 +63,7 @@ void main(void)
 	//print welcome messages and start program
 	LCD_WriteCommand(lcd_Clear);
 	_delay_ms(1000);
-	LCD_WriteString("Welcome To");
-	LCD_GoTo(line_2,0);
-	LCD_WriteString("Program");
+	LCD_WriteString("Welcome");
 	_delay_ms(1000);
 	LCD_WriteCommand(lcd_Clear);
 	LCD_WriteString("Adjust Date");
@@ -75,9 +71,28 @@ void main(void)
 	LCD_WriteString("and Time");
 	_delay_ms(1000);
 	LCD_WriteCommand(lcd_Clear);
-	///////////////////////////////////
-	////WRITE RTC ADJUST LOGIC HERE////
-	///////////////////////////////////
+
+	EXTI0_CallBackFunc(rtc_inc_exti); //increment
+	EXTI1_CallBackFunc(rtc_ok_Exti);
+	EXTI_Enable(EXTI0);
+	EXTI_Enable(EXTI1);
+	EXTI_SetTriggerMode();
+	GIE_Enable();
+	RTC_InitTemp();
+	//13 button press to set date and time
+	u8 RTC_Curr = RTC_u8GetCurrentButtonCount();
+	while(RTC_Curr < 13) //no action until user fully enters his data
+	{
+		RTC_DisplayTemp();
+		_delay_ms(500);
+		RTC_Curr = RTC_u8GetCurrentButtonCount();
+	}
+	RTC_SetVals();
+	LCD_WriteCommand(lcd_Clear);
+	EXTI_Disable(EXTI0);
+	EXTI_Disable(EXTI1);
+	GIE_Disable();
+
 	LCD_WriteString("Choose Mode: ");
 	_delay_ms(1000);
 	LCD_WriteCommand(lcd_Clear);
@@ -89,6 +104,9 @@ void main(void)
 	LCD_WriteString("Choose, press ok");
 	LCD_GoTo(line_2,0);
 	LCD_WriteString("Choice: ");
+
+	DIO_SetPinValue(3,PIN_2,HIGH); //pull up
+	DIO_SetPinValue(3,PIN_3,HIGH); //pull up
 
 	EXTI0_CallBackFunc(increment_mode_exti); //increment
 	EXTI2_CallBackFunc(end_prg_exti);
@@ -115,42 +133,7 @@ void main(void)
 	{
 		GIE_Enable();
 		LCD_WriteCommand(lcd_Clear);
-		u8 hour, min, sec;
-		u8 day, date, month, year;
-		char buffer[10];
-
-		while (1) {
-			RTC_GetTime(&sec, &min, &hour);
-			RTC_GetDate(&day, &date, &month, &year);
-
-			// Display time
-			sprintf(buffer, "%02d", hour);
-			LCD_WriteString(buffer);
-			LCD_WriteChar(':');
-
-			sprintf(buffer, "%02d", min);
-			LCD_WriteString(buffer);
-			LCD_WriteChar(':');
-
-			sprintf(buffer, "%02d", sec);
-			LCD_WriteString(buffer);
-			LCD_WriteChar(' ');
-
-			// Display date (DD-MM-YY)
-			sprintf(buffer, "%02d", date);
-			LCD_WriteString(buffer);
-			LCD_WriteChar('-');
-
-			sprintf(buffer, "%02d", month);
-			LCD_WriteString(buffer);
-			LCD_WriteChar('-');
-
-			sprintf(buffer, "%02d", year);
-			LCD_WriteString(buffer);
-
-			_delay_ms(500);
-			LCD_WriteCommand(lcd_Clear);  // Clear the LCD for the next update
-		}
+		RTC_Display();
 		break;
 	}
 	case Alarm:
@@ -323,5 +306,11 @@ void Alarm_IncrementOK_EXTI(void)
 	Alarm_voidIncrementOK();
 }
 
-
-
+void rtc_inc_exti(void)
+{
+	RTC_IncrementCurrentTemp();
+}
+void rtc_ok_Exti(void)
+{
+	RTC_incButtonCount();
+}

@@ -32,5 +32,12 @@ u8 BCD_to_Dec(u8 bcd);
 u8 Dec_to_BCD(u8 dec);
 void RTC_SetDate(u8 day, u8 date, u8 month, u8 year);
 void RTC_GetDate(u8 *day, u8 *date, u8 *month, u8 *year);
-
+u8 RTC_u8GetCurrentButtonCount(void);
+void RTC_incButtonCount(void);
+void RTC_IncrementCurrentTemp(void);
+void RTC_SetVals(void);
+char* MapDay(u8 num);
+void RTC_Display(void);
+void RTC_DisplayTemp(void);
+void RTC_InitTemp(void);
 #endif /* RTC_INT_H_ */
