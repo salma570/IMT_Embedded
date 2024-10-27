@@ -88,6 +88,8 @@ void main(void)
 		RTC_Curr = RTC_u8GetCurrentButtonCount();
 	}
 	RTC_SetVals();
+//	RTC_SetTime(0, 8, 5); //use this instead of lines 83 to 90 to skip manual adjustment
+
 	LCD_WriteCommand(lcd_Clear);
 	EXTI_Disable(EXTI0);
 	EXTI_Disable(EXTI1);
@@ -196,7 +198,7 @@ void main(void)
 		EXTI0_CallBackFunc(StopWatch_EXTI);
 		EXTI_Enable(EXTI0);
 		GIE_Enable();
-		xTaskCreate(StopWatch_Task, NULL, configMINIMAL_STACK_SIZE, NULL, 0, &StopWatchHandle);
+		xTaskCreate(StopWatch_Task, NULL, configMINIMAL_STACK_SIZE+50, NULL, 0, &StopWatchHandle);
 		vTaskStartScheduler();
 		break;
 	}
@@ -219,11 +221,15 @@ void main(void)
 		init_alltemp();
 		while(GetCurrentButton_count() < 6) //no action until user fully enters his data
 		{
+			_delay_ms(50); //debounce
 			CountDown_voidTempDisplay();
 		}
 		CountDownu8_SetCurrent_Values();
+		EXTI_Disable(EXTI0);
+		EXTI_Disable(EXTI1);
+		_delay_ms(100); //debounce
 		//now the last okay is pressed and task should start
-		xTaskCreate(Countdown_Task, NULL, configMINIMAL_STACK_SIZE, NULL, 0, NULL);
+		xTaskCreate(Countdown_Task, NULL, configMINIMAL_STACK_SIZE+50, NULL, 0, NULL);
 		vTaskStartScheduler();
 		break;
 	}

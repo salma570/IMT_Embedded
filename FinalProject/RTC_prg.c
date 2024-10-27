@@ -371,40 +371,45 @@ void RTC_Display(void)
 	u8 hour, min, sec;
 	u8 day, date, month, year;
 	char buffer[10];
-	LCD_GoTo(line_1,0);
-	RTC_GetTime(&sec, &min, &hour);
-	RTC_GetDate(&day, &date, &month, &year);
+	while(1)
+	{
+		LCD_WriteCommand(lcd_Clear);
+		LCD_GoTo(line_1,0);
+		RTC_GetTime(&sec, &min, &hour);
+		RTC_GetDate(&day, &date, &month, &year);
 
-	// Display time
-	sprintf(buffer, "%02d", hour);
-	LCD_WriteString(buffer);
-	LCD_WriteChar(':');
+		// Display time
+		sprintf(buffer, "%02d", hour);
+		LCD_WriteString(buffer);
+		LCD_WriteChar(':');
 
-	sprintf(buffer, "%02d", min);
-	LCD_WriteString(buffer);
-	LCD_WriteChar(':');
+		sprintf(buffer, "%02d", min);
+		LCD_WriteString(buffer);
+		LCD_WriteChar(':');
 
-	sprintf(buffer, "%02d", sec);
-	LCD_WriteString(buffer);
-	LCD_WriteChar(' ');
+		sprintf(buffer, "%02d", sec);
+		LCD_WriteString(buffer);
+		LCD_WriteChar(' ');
 
-	LCD_GoTo(line_2,0);
-	char * WeekDay = MapDay(day);
-	LCD_WriteString(WeekDay);
-	LCD_WriteChar('-');
+		LCD_GoTo(line_2,0);
+		char * WeekDay = MapDay(day);
+		LCD_WriteString(WeekDay);
+		LCD_WriteChar('-');
 
-	// Display date (DD-MM-YY)
-	sprintf(buffer, "%02d", date);
-	LCD_WriteString(buffer);
-	LCD_WriteChar('-');
+		// Display date (DD-MM-YY)
+		sprintf(buffer, "%02d", date);
+		LCD_WriteString(buffer);
+		LCD_WriteChar('-');
 
-	sprintf(buffer, "%02d", month);
-	LCD_WriteString(buffer);
-	LCD_WriteChar('-');
+		sprintf(buffer, "%02d", month);
+		LCD_WriteString(buffer);
+		LCD_WriteChar('-');
 
-	sprintf(buffer, "%02d", year);
-	LCD_WriteString(buffer);
+		sprintf(buffer, "%02d", year);
+		LCD_WriteString(buffer);
 
+		_delay_ms(500);
+	}
 }
 
 void RTC_DisplayTemp(void)
